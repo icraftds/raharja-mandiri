@@ -27,6 +27,50 @@ const latestNews = [
         image: '/assets/images/tanam-1.jpg',
     }
 ];
+
+// Mitra Kerja & Kolaborasi
+const partners = [
+    {
+        name: 'Pemerintah Daerah',
+        category: 'Kabupaten Sumedang',
+        type: 'pemda',
+    },
+    {
+        name: 'Dinas Sosial',
+        category: 'Provinsi Jawa Barat',
+        type: 'dinsos',
+    },
+    {
+        name: 'RS Mitra Keluarga',
+        category: 'Layanan Medis & Anak',
+        type: 'hospital',
+    },
+    {
+        name: 'Komunitas Peduli',
+        category: 'Relawan & Sahabat Kasih',
+        type: 'community',
+    },
+    {
+        name: 'Donatur Perusahaan',
+        category: 'Program CSR Mitra',
+        type: 'csr',
+    },
+    {
+        name: 'BAZNAS',
+        category: 'Badan Amil Zakat',
+        type: 'baznas',
+    },
+    {
+        name: 'Kitabisa',
+        category: 'Platform Solidaritas',
+        type: 'kitabisa',
+    },
+    {
+        name: 'PMI Sumedang',
+        category: 'Palang Merah Indonesia',
+        type: 'pmi',
+    },
+];
 </script>
 
 <template>
@@ -207,18 +251,196 @@ const latestNews = [
         </section>
 
         <!-- Mitra & Kolaborasi -->
-        <section class="py-20 bg-white border-b border-gray-100">
-            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-                <h2 class="text-gray-500 font-medium tracking-wide uppercase text-sm mb-8">Mitra Kerja & Kolaborasi Kami</h2>
-                <div class="flex flex-wrap justify-center items-center gap-8 md:gap-16 opacity-60 grayscale hover:grayscale-0 transition-all duration-500">
-                    <div class="text-xl font-black text-gray-400">Pemerintah Daerah</div>
-                    <div class="text-xl font-black text-gray-400">Dinas Sosial</div>
-                    <div class="text-xl font-black text-gray-400">RS Mitra Keluarga</div>
-                    <div class="text-xl font-black text-gray-400">Komunitas Peduli</div>
-                    <div class="text-xl font-black text-gray-400">Donatur Perusahaan</div>
-                </div>
-                <p class="mt-8 text-sm text-gray-400 max-w-2xl mx-auto">Banyak pihak yang telah membantu kami dalam upaya mewujudkan kesejahteraan anak-anak Panti Sosial Raharja Mandiri.</p>
+        <section class="py-20 bg-white border-b border-gray-100 overflow-hidden">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center mb-10">
+                <span class="text-blue-600 font-bold tracking-wider uppercase text-xs sm:text-sm bg-blue-50 px-3.5 py-1.5 rounded-full inline-block mb-3">Kolaborasi & Sinergi</span>
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-gray-900 tracking-tight">Mitra Kerja & Kolaborasi Kami</h2>
+                <p class="mt-3 text-sm sm:text-base text-gray-500 max-w-2xl mx-auto">
+                    Bekerja sama erat dengan berbagai instansi, lembaga pelayanan kesehatan, dan mitra terpercaya demi kesejahteraan anak asuh.
+                </p>
             </div>
+
+            <!-- Marquee Carousel with Gradient Edge Masking -->
+            <div class="relative w-full overflow-hidden py-3">
+                <!-- Edge Gradients for Smooth In/Out Fade -->
+                <div class="absolute left-0 inset-y-0 w-16 sm:w-32 bg-gradient-to-r from-white via-white/80 to-transparent z-10 pointer-events-none"></div>
+                <div class="absolute right-0 inset-y-0 w-16 sm:w-32 bg-gradient-to-l from-white via-white/80 to-transparent z-10 pointer-events-none"></div>
+
+                <!-- Scrolling Track (Infinite Marquee) -->
+                <div class="flex w-max animate-marquee hover:[animation-play-state:paused] cursor-pointer">
+                    <!-- Track 1 -->
+                    <div class="flex items-center gap-5 pr-5">
+                        <div 
+                            v-for="(partner, idx) in partners" 
+                            :key="'track1-' + idx"
+                            class="flex items-center gap-3.5 px-5 py-3.5 rounded-2xl bg-gray-50/90 hover:bg-white border border-gray-200/80 hover:border-blue-400 hover:shadow-lg shadow-xs transition-all duration-300 group/partner whitespace-nowrap"
+                        >
+                            <!-- Logo Icon Container -->
+                            <div class="w-11 h-11 rounded-xl flex items-center justify-center transition-transform duration-300 group-hover/partner:scale-110 shadow-xs flex-shrink-0">
+                                <!-- Pemda -->
+                                <svg v-if="partner.type === 'pemda'" class="w-9 h-9" viewBox="0 0 40 40" fill="none">
+                                    <path d="M20 5L31 9.5V18C31 25.5 26.5 31 20 34C13.5 31 9 25.5 9 18V9.5L20 5Z" fill="#1E40AF" stroke="#3B82F6" stroke-width="1.5"/>
+                                    <path d="M20 11L21.8 15.2H26.2L22.6 17.8L24 22L20 19.5L16 22L17.4 17.8L13.8 15.2H18.2L20 11Z" fill="#FBBF24"/>
+                                    <path d="M14 24.5C15.8 26.5 17.8 27.5 20 27.5C22.2 27.5 24.2 26.5 26 24.5" stroke="#93C5FD" stroke-width="1.8" stroke-linecap="round"/>
+                                </svg>
+
+                                <!-- Dinsos -->
+                                <svg v-else-if="partner.type === 'dinsos'" class="w-9 h-9" viewBox="0 0 40 40" fill="none">
+                                    <circle cx="20" cy="20" r="16" fill="#FEF3C7" stroke="#F59E0B" stroke-width="1.5"/>
+                                    <path d="M20 10C17.5 10 14 13 14 16.5C14 21 20 25 20 25C20 25 26 21 26 16.5C26 13 22.5 10 20 10Z" fill="#DC2626"/>
+                                    <path d="M11 22C12.5 26.5 16 29 20 29C24 29 27.5 26.5 29 22" stroke="#D97706" stroke-width="2" stroke-linecap="round"/>
+                                    <path d="M14 26C16 27.5 18 28 20 28C22 28 24 27.5 26 26" stroke="#B45309" stroke-width="1.5" stroke-linecap="round"/>
+                                </svg>
+
+                                <!-- RS Mitra Keluarga -->
+                                <svg v-else-if="partner.type === 'hospital'" class="w-9 h-9" viewBox="0 0 40 40" fill="none">
+                                    <rect x="5" y="5" width="30" height="30" rx="10" fill="#ECFDF5" stroke="#10B981" stroke-width="1.5"/>
+                                    <path d="M17 11H23V17H29V23H23V29H17V23H11V17H17V11Z" fill="#059669"/>
+                                    <path d="M20 16.5V23.5M16.5 20H23.5" stroke="#FFFFFF" stroke-width="1.5" stroke-linecap="round"/>
+                                    <circle cx="20" cy="20" r="2.5" fill="#A7F3D0"/>
+                                </svg>
+
+                                <!-- Komunitas Peduli -->
+                                <svg v-else-if="partner.type === 'community'" class="w-9 h-9" viewBox="0 0 40 40" fill="none">
+                                    <circle cx="20" cy="20" r="15" fill="#FDF2F8" stroke="#F472B6" stroke-width="1.5"/>
+                                    <circle cx="20" cy="12" r="2.8" fill="#EC4899"/>
+                                    <circle cx="12.5" cy="23" r="2.8" fill="#8B5CF6"/>
+                                    <circle cx="27.5" cy="23" r="2.8" fill="#3B82F6"/>
+                                    <path d="M15 15.5C16.5 14.5 23.5 14.5 25 15.5" stroke="#DB2777" stroke-width="1.8" stroke-linecap="round"/>
+                                    <path d="M13.5 27C16.5 29.5 23.5 29.5 26.5 27" stroke="#8B5CF6" stroke-width="1.8" stroke-linecap="round"/>
+                                </svg>
+
+                                <!-- Donatur Perusahaan -->
+                                <svg v-else-if="partner.type === 'csr'" class="w-9 h-9" viewBox="0 0 40 40" fill="none">
+                                    <rect x="5" y="5" width="30" height="30" rx="10" fill="#EEF2FF" stroke="#6366F1" stroke-width="1.5"/>
+                                    <path d="M20 9L29 14.5V25.5L20 31L11 25.5V14.5L20 9Z" fill="#4F46E5" fill-opacity="0.2" stroke="#4F46E5" stroke-width="1.5"/>
+                                    <path d="M20 9V31M11 14.5L29 25.5M11 25.5L29 14.5" stroke="#818CF8" stroke-width="1.2"/>
+                                    <circle cx="20" cy="20" r="3.5" fill="#4F46E5"/>
+                                </svg>
+
+                                <!-- BAZNAS -->
+                                <svg v-else-if="partner.type === 'baznas'" class="w-9 h-9" viewBox="0 0 40 40" fill="none">
+                                    <rect x="5" y="5" width="30" height="30" rx="10" fill="#F0FDF4" stroke="#22C55E" stroke-width="1.5"/>
+                                    <rect x="13" y="13" width="14" height="14" rx="2" fill="#16A34A" fill-opacity="0.25" transform="rotate(45 20 20)" stroke="#16A34A" stroke-width="1.4"/>
+                                    <rect x="13" y="13" width="14" height="14" rx="2" fill="#15803D" fill-opacity="0.15" stroke="#15803D" stroke-width="1.4"/>
+                                    <circle cx="20" cy="20" r="3" fill="#EAB308"/>
+                                </svg>
+
+                                <!-- Kitabisa -->
+                                <svg v-else-if="partner.type === 'kitabisa'" class="w-9 h-9" viewBox="0 0 40 40" fill="none">
+                                    <rect x="5" y="5" width="30" height="30" rx="10" fill="#F0F9FF" stroke="#0284C7" stroke-width="1.5"/>
+                                    <path d="M20 28C20 28 10 21.5 10 15C10 11.5 12.8 9 16 9C18.2 9 19.4 10.2 20 11.2C20.6 10.2 21.8 9 24 9C27.2 9 30 11.5 30 15C30 21.5 20 28 20 28Z" fill="#0284C7"/>
+                                    <circle cx="20" cy="17" r="2.5" fill="#BAE6FD"/>
+                                </svg>
+
+                                <!-- PMI -->
+                                <svg v-else-if="partner.type === 'pmi'" class="w-9 h-9" viewBox="0 0 40 40" fill="none">
+                                    <circle cx="20" cy="20" r="15" fill="#FFF1F2" stroke="#E11D48" stroke-width="1.5"/>
+                                    <path d="M17.5 11.5H22.5V17.5H28.5V22.5H22.5V28.5H17.5V22.5H11.5V17.5H17.5V11.5Z" fill="#E11D48"/>
+                                </svg>
+                            </div>
+
+                            <!-- Partner Details -->
+                            <div class="text-left">
+                                <h4 class="text-sm sm:text-base font-bold text-gray-800 group-hover/partner:text-blue-600 transition-colors tracking-tight">
+                                    {{ partner.name }}
+                                </h4>
+                                <p class="text-[11px] sm:text-xs font-medium text-gray-400 group-hover/partner:text-gray-500 transition-colors">
+                                    {{ partner.category }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Track 2 (Duplicated for Seamless Infinite Loop) -->
+                    <div class="flex items-center gap-5 pr-5" aria-hidden="true">
+                        <div 
+                            v-for="(partner, idx) in partners" 
+                            :key="'track2-' + idx"
+                            class="flex items-center gap-3.5 px-5 py-3.5 rounded-2xl bg-gray-50/90 hover:bg-white border border-gray-200/80 hover:border-blue-400 hover:shadow-lg shadow-xs transition-all duration-300 group/partner whitespace-nowrap"
+                        >
+                            <!-- Logo Icon Container -->
+                            <div class="w-11 h-11 rounded-xl flex items-center justify-center transition-transform duration-300 group-hover/partner:scale-110 shadow-xs flex-shrink-0">
+                                <!-- Pemda -->
+                                <svg v-if="partner.type === 'pemda'" class="w-9 h-9" viewBox="0 0 40 40" fill="none">
+                                    <path d="M20 5L31 9.5V18C31 25.5 26.5 31 20 34C13.5 31 9 25.5 9 18V9.5L20 5Z" fill="#1E40AF" stroke="#3B82F6" stroke-width="1.5"/>
+                                    <path d="M20 11L21.8 15.2H26.2L22.6 17.8L24 22L20 19.5L16 22L17.4 17.8L13.8 15.2H18.2L20 11Z" fill="#FBBF24"/>
+                                    <path d="M14 24.5C15.8 26.5 17.8 27.5 20 27.5C22.2 27.5 24.2 26.5 26 24.5" stroke="#93C5FD" stroke-width="1.8" stroke-linecap="round"/>
+                                </svg>
+
+                                <!-- Dinsos -->
+                                <svg v-else-if="partner.type === 'dinsos'" class="w-9 h-9" viewBox="0 0 40 40" fill="none">
+                                    <circle cx="20" cy="20" r="16" fill="#FEF3C7" stroke="#F59E0B" stroke-width="1.5"/>
+                                    <path d="M20 10C17.5 10 14 13 14 16.5C14 21 20 25 20 25C20 25 26 21 26 16.5C26 13 22.5 10 20 10Z" fill="#DC2626"/>
+                                    <path d="M11 22C12.5 26.5 16 29 20 29C24 29 27.5 26.5 29 22" stroke="#D97706" stroke-width="2" stroke-linecap="round"/>
+                                    <path d="M14 26C16 27.5 18 28 20 28C22 28 24 27.5 26 26" stroke="#B45309" stroke-width="1.5" stroke-linecap="round"/>
+                                </svg>
+
+                                <!-- RS Mitra Keluarga -->
+                                <svg v-else-if="partner.type === 'hospital'" class="w-9 h-9" viewBox="0 0 40 40" fill="none">
+                                    <rect x="5" y="5" width="30" height="30" rx="10" fill="#ECFDF5" stroke="#10B981" stroke-width="1.5"/>
+                                    <path d="M17 11H23V17H29V23H23V29H17V23H11V17H17V11Z" fill="#059669"/>
+                                    <path d="M20 16.5V23.5M16.5 20H23.5" stroke="#FFFFFF" stroke-width="1.5" stroke-linecap="round"/>
+                                    <circle cx="20" cy="20" r="2.5" fill="#A7F3D0"/>
+                                </svg>
+
+                                <!-- Komunitas Peduli -->
+                                <svg v-else-if="partner.type === 'community'" class="w-9 h-9" viewBox="0 0 40 40" fill="none">
+                                    <circle cx="20" cy="20" r="15" fill="#FDF2F8" stroke="#F472B6" stroke-width="1.5"/>
+                                    <circle cx="20" cy="12" r="2.8" fill="#EC4899"/>
+                                    <circle cx="12.5" cy="23" r="2.8" fill="#8B5CF6"/>
+                                    <circle cx="27.5" cy="23" r="2.8" fill="#3B82F6"/>
+                                    <path d="M15 15.5C16.5 14.5 23.5 14.5 25 15.5" stroke="#DB2777" stroke-width="1.8" stroke-linecap="round"/>
+                                    <path d="M13.5 27C16.5 29.5 23.5 29.5 26.5 27" stroke="#8B5CF6" stroke-width="1.8" stroke-linecap="round"/>
+                                </svg>
+
+                                <!-- Donatur Perusahaan -->
+                                <svg v-else-if="partner.type === 'csr'" class="w-9 h-9" viewBox="0 0 40 40" fill="none">
+                                    <rect x="5" y="5" width="30" height="30" rx="10" fill="#EEF2FF" stroke="#6366F1" stroke-width="1.5"/>
+                                    <path d="M20 9L29 14.5V25.5L20 31L11 25.5V14.5L20 9Z" fill="#4F46E5" fill-opacity="0.2" stroke="#4F46E5" stroke-width="1.5"/>
+                                    <path d="M20 9V31M11 14.5L29 25.5M11 25.5L29 14.5" stroke="#818CF8" stroke-width="1.2"/>
+                                    <circle cx="20" cy="20" r="3.5" fill="#4F46E5"/>
+                                </svg>
+
+                                <!-- BAZNAS -->
+                                <svg v-else-if="partner.type === 'baznas'" class="w-9 h-9" viewBox="0 0 40 40" fill="none">
+                                    <rect x="5" y="5" width="30" height="30" rx="10" fill="#F0FDF4" stroke="#22C55E" stroke-width="1.5"/>
+                                    <rect x="13" y="13" width="14" height="14" rx="2" fill="#16A34A" fill-opacity="0.25" transform="rotate(45 20 20)" stroke="#16A34A" stroke-width="1.4"/>
+                                    <rect x="13" y="13" width="14" height="14" rx="2" fill="#15803D" fill-opacity="0.15" stroke="#15803D" stroke-width="1.4"/>
+                                    <circle cx="20" cy="20" r="3" fill="#EAB308"/>
+                                </svg>
+
+                                <!-- Kitabisa -->
+                                <svg v-else-if="partner.type === 'kitabisa'" class="w-9 h-9" viewBox="0 0 40 40" fill="none">
+                                    <rect x="5" y="5" width="30" height="30" rx="10" fill="#F0F9FF" stroke="#0284C7" stroke-width="1.5"/>
+                                    <path d="M20 28C20 28 10 21.5 10 15C10 11.5 12.8 9 16 9C18.2 9 19.4 10.2 20 11.2C20.6 10.2 21.8 9 24 9C27.2 9 30 11.5 30 15C30 21.5 20 28 20 28Z" fill="#0284C7"/>
+                                    <circle cx="20" cy="17" r="2.5" fill="#BAE6FD"/>
+                                </svg>
+
+                                <!-- PMI -->
+                                <svg v-else-if="partner.type === 'pmi'" class="w-9 h-9" viewBox="0 0 40 40" fill="none">
+                                    <circle cx="20" cy="20" r="15" fill="#FFF1F2" stroke="#E11D48" stroke-width="1.5"/>
+                                    <path d="M17.5 11.5H22.5V17.5H28.5V22.5H22.5V28.5H17.5V22.5H11.5V17.5H17.5V11.5Z" fill="#E11D48"/>
+                                </svg>
+                            </div>
+
+                            <!-- Partner Details -->
+                            <div class="text-left">
+                                <h4 class="text-sm sm:text-base font-bold text-gray-800 group-hover/partner:text-blue-600 transition-colors tracking-tight">
+                                    {{ partner.name }}
+                                </h4>
+                                <p class="text-[11px] sm:text-xs font-medium text-gray-400 group-hover/partner:text-gray-500 transition-colors">
+                                    {{ partner.category }}
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <p class="mt-8 text-center text-sm text-gray-400 max-w-2xl mx-auto px-4">
+                Didukung oleh berbagai pihak dalam upaya mewujudkan kemandirian dan masa depan cerah anak-anak panti asuhan.
+            </p>
         </section>
 
         <!-- Instagram Feed Vibe / Berita -->
@@ -333,5 +555,23 @@ const latestNews = [
 }
 .animate-fade-in-up {
     animation: fadeInUp 0.8s ease-out forwards;
+}
+
+/* Continuous Marquee Animation */
+@keyframes marqueeScroll {
+    0% {
+        transform: translateX(0%);
+    }
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
+.animate-marquee {
+    animation: marqueeScroll 30s linear infinite;
+}
+
+.animate-marquee:hover {
+    animation-play-state: paused;
 }
 </style>
