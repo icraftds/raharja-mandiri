@@ -66,14 +66,12 @@ const toggleMobileMenu = () => {
                         </div>
                     </div>
                 </div>
-                
-                <Link href="/kontak" :class="['font-medium transition-colors hover:text-blue-400', isScrolled ? 'text-gray-600' : 'text-gray-100']">Hubungi Kami</Link>
             </nav>
 
             <!-- CTA & Mobile Toggle -->
             <div class="flex items-center gap-4">
-                <Link href="/donasi/rekening" class="hidden md:inline-flex items-center justify-center px-5 py-2.5 border border-transparent text-sm font-semibold rounded-full text-white bg-blue-600 hover:bg-blue-700 transition-all shadow-lg hover:shadow-blue-500/30">
-                    Donasi Sekarang
+                <Link href="/kontak" class="hidden md:inline-flex items-center justify-center px-5 py-2.5 border border-transparent text-sm font-semibold rounded-full text-white bg-blue-600 hover:bg-blue-700 transition-all shadow-lg hover:shadow-blue-500/30">
+                    Hubungi Kami
                 </Link>
                 
                 <button @click="toggleMobileMenu" class="md:hidden p-2 rounded-md" :class="isScrolled ? 'text-gray-800' : 'text-white'">
@@ -113,12 +111,10 @@ const toggleMobileMenu = () => {
                     <Link href="/donasi/kebutuhan" class="text-gray-600 text-sm p-2 hover:text-blue-600 hover:bg-blue-50 rounded-lg transition-colors">Daftar Kebutuhan</Link>
                 </div>
             </details>
-            
-            <Link href="/kontak" class="text-gray-800 font-medium p-3 hover:bg-blue-50 rounded-lg transition-colors">Hubungi Kami</Link>
 
             <div class="mt-4 px-2">
-                <Link href="/donasi/rekening" class="flex justify-center w-full px-5 py-3 border border-transparent text-base font-semibold rounded-xl text-white bg-blue-600 hover:bg-blue-700 transition-all">
-                    Donasi Sekarang
+                <Link href="/kontak" class="flex justify-center w-full px-5 py-3 border border-transparent text-base font-semibold rounded-xl text-white bg-blue-600 hover:bg-blue-700 transition-all">
+                    Hubungi Kami
                 </Link>
             </div>
         </div>

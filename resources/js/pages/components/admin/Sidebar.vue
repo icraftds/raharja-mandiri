@@ -1,0 +1,115 @@
+<script setup lang="ts">
+import { Link } from '@inertiajs/vue3';
+</script>
+<template>
+    <aside class="w-64 bg-gray-900 text-white min-h-screen flex flex-col fixed left-0 top-0 bottom-0 z-40">
+        <div class="p-6 border-b border-gray-800">
+            <h2 class="text-2xl font-black tracking-widest text-teal-400">CMS<span class="text-white">PANEL</span></h2>
+        </div>
+        <nav class="flex-grow p-4 space-y-2 overflow-y-auto">
+            <Link href="/admin/dashboard" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-gray-800 text-white font-medium hover:bg-gray-700 transition-colors">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
+                Beranda
+            </Link>
+            
+            <div class="pt-6 pb-2">
+                <span class="px-4 text-xs font-bold text-gray-500 uppercase tracking-widest">Halaman Publik</span>
+            </div>
+            
+            <Link href="/admin/dashboard" :class="[
+                'flex items-center justify-between px-4 py-3 rounded-xl font-bold transition-colors',
+                $page.url === '/admin/dashboard' ? 'text-teal-400 bg-teal-500/10' : 'text-gray-400 hover:bg-gray-800 hover:text-white'
+            ]">
+                <div class="flex items-center gap-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 12l8.954-8.955c.44-.439 1.152-.439 1.591 0L21.75 12M4.5 9.75v10.125c0 .621.504 1.125 1.125 1.125H9.75v-4.875c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125V21h4.125c.621 0 1.125-.504 1.125-1.125V9.75M8.25 21h8.25" /></svg>
+                    Hero Section
+                </div>
+                <div v-if="$page.url === '/admin/dashboard'" class="w-2 h-2 rounded-full bg-teal-400"></div>
+            </Link>
+            
+            <Link href="/admin/sejarah" :class="[
+                'flex items-center justify-between gap-3 px-4 py-3 rounded-xl font-medium transition-colors',
+                $page.url === '/admin/sejarah' ? 'text-teal-400 bg-teal-500/10 font-bold' : 'text-gray-400 hover:bg-gray-800 hover:text-white'
+            ]">
+                <div class="flex items-center gap-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 6.042A8.967 8.967 0 006 3.75c-1.052 0-2.062.18-3 .512v14.25A8.987 8.987 0 016 18c2.305 0 4.408.867 6 2.292m0-14.25a8.966 8.966 0 016-2.292c1.052 0 2.062.18 3 .512v14.25A8.987 8.987 0 0018 18a8.967 8.967 0 00-6 2.292m0-14.25v14.25" /></svg>
+                    Sejarah
+                </div>
+                <div v-if="$page.url === '/admin/sejarah'" class="w-2 h-2 rounded-full bg-teal-400"></div>
+            </Link>
+            
+            <Link href="/admin/visi-misi" :class="[
+                'flex items-center justify-between gap-3 px-4 py-3 rounded-xl font-medium transition-colors',
+                $page.url === '/admin/visi-misi' ? 'text-teal-400 bg-teal-500/10 font-bold' : 'text-gray-400 hover:bg-gray-800 hover:text-white'
+            ]">
+                <div class="flex items-center gap-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M3 3v1.5M3 21v-6m0 0l2.77-.693a9 9 0 016.208.682l.108.054a9 9 0 006.086.71l3.114-.732a48.524 48.524 0 01-.005-10.499l-3.11.732a9 9 0 01-6.085-.711l-.108-.054a9 9 0 00-6.208-.682L3 4.5M3 15V4.5" /></svg>
+                    Visi & Misi
+                </div>
+                <div v-if="$page.url === '/admin/visi-misi'" class="w-2 h-2 rounded-full bg-teal-400"></div>
+            </Link>
+
+            <Link href="/admin/kepengurusan" :class="[
+                'flex items-center justify-between gap-3 px-4 py-3 rounded-xl font-medium transition-colors',
+                $page.url === '/admin/kepengurusan' ? 'text-teal-400 bg-teal-500/10 font-bold' : 'text-gray-400 hover:bg-gray-800 hover:text-white'
+            ]">
+                <div class="flex items-center gap-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z" /></svg>
+                    Kepengurusan
+                </div>
+                <div v-if="$page.url === '/admin/kepengurusan'" class="w-2 h-2 rounded-full bg-teal-400"></div>
+            </Link>
+
+            <Link href="/admin/galeri" :class="[
+                'flex items-center justify-between gap-3 px-4 py-3 rounded-xl font-medium transition-colors',
+                $page.url === '/admin/galeri' ? 'text-teal-400 bg-teal-500/10 font-bold' : 'text-gray-400 hover:bg-gray-800 hover:text-white'
+            ]">
+                <div class="flex items-center gap-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z" /></svg>
+                    Galeri
+                </div>
+                <div v-if="$page.url === '/admin/galeri'" class="w-2 h-2 rounded-full bg-teal-400"></div>
+            </Link>
+
+            <Link href="/admin/artikel" :class="[
+                'flex items-center justify-between gap-3 px-4 py-3 rounded-xl font-medium transition-colors',
+                $page.url.startsWith('/admin/artikel') ? 'text-teal-400 bg-teal-500/10 font-bold' : 'text-gray-400 hover:bg-gray-800 hover:text-white'
+            ]">
+                <div class="flex items-center gap-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 7.5h1.5m-1.5 3h1.5m-7.5 3h7.5m-7.5 3h7.5m3-9h3.375c.621 0 1.125.504 1.125 1.125V18a2.25 2.25 0 01-2.25 2.25M16.5 7.5V18a2.25 2.25 0 002.25 2.25M16.5 7.5V4.875c0-.621-.504-1.125-1.125-1.125H4.125C3.504 3.75 3 4.254 3 4.875V18a2.25 2.25 0 002.25 2.25h13.5M6 7.5h3v3H6v-3z" /></svg>
+                    Artikel & Berita
+                </div>
+                <div v-if="$page.url.startsWith('/admin/artikel')" class="w-2 h-2 rounded-full bg-teal-400"></div>
+            </Link>
+
+            <Link href="/admin/rekening" :class="[
+                'flex items-center justify-between gap-3 px-4 py-3 rounded-xl font-medium transition-colors',
+                $page.url === '/admin/rekening' ? 'text-teal-400 bg-teal-500/10 font-bold' : 'text-gray-400 hover:bg-gray-800 hover:text-white'
+            ]">
+                <div class="flex items-center gap-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z" /></svg>
+                    Rekening Donasi
+                </div>
+                <div v-if="$page.url === '/admin/rekening'" class="w-2 h-2 rounded-full bg-teal-400"></div>
+            </Link>
+
+            <Link href="/admin/kontak" :class="[
+                'flex items-center justify-between gap-3 px-4 py-3 rounded-xl font-medium transition-colors',
+                $page.url === '/admin/kontak' ? 'text-teal-400 bg-teal-500/10 font-bold' : 'text-gray-400 hover:bg-gray-800 hover:text-white'
+            ]">
+                <div class="flex items-center gap-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M14.25 9.75v-4.5m0 4.5h4.5m-4.5 0l6-6m-3 18c-8.284 0-15-6.716-15-15V4.5A2.25 2.25 0 014.5 2.25h13.5A2.25 2.25 0 0120.25 4.5v13.5A2.25 2.25 0 0118 20.25H4.5z" /></svg>
+                    Informasi Kontak
+                </div>
+                <div v-if="$page.url === '/admin/kontak'" class="w-2 h-2 rounded-full bg-teal-400"></div>
+            </Link>
+        </nav>
+        
+        <div class="p-4 border-t border-gray-800">
+            <Link href="/admin/login" class="flex items-center gap-3 px-4 py-3 rounded-xl text-red-400 font-medium hover:bg-red-500/10 transition-colors w-full">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" /></svg>
+                Logout
+            </Link>
+        </div>
+    </aside>
+</template>

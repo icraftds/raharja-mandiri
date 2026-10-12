@@ -69,7 +69,7 @@ const articles = [
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-8">
                 
                 <!-- Featured Article (Cinematic Left-Right Layout) -->
-                <div class="bg-white rounded-[3rem] shadow-2xl overflow-hidden mb-20 flex flex-col lg:flex-row group border border-gray-100">
+                <Link :href="'/artikel/baca?img=' + encodeURIComponent(featuredArticle.image) + '&title=' + encodeURIComponent(featuredArticle.title) + '&category=' + encodeURIComponent(featuredArticle.category) + '&summary=' + encodeURIComponent(featuredArticle.summary)" class="bg-white rounded-[3rem] shadow-2xl overflow-hidden mb-20 flex flex-col lg:flex-row group border border-gray-100 hover:shadow-3xl block">
                     <div class="w-full lg:w-3/5 h-80 lg:h-auto relative overflow-hidden">
                         <img :src="featuredArticle.image" :alt="featuredArticle.title" class="absolute inset-0 w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-1000" />
                         <div class="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-black/20 hidden lg:block"></div>
@@ -77,23 +77,23 @@ const articles = [
                     <div class="w-full lg:w-2/5 p-10 md:p-16 flex flex-col justify-center relative">
                         <span class="inline-block px-5 py-2 bg-blue-50 text-blue-600 rounded-full text-xs font-bold uppercase tracking-wider mb-6 w-max">{{ featuredArticle.category }}</span>
                         <h2 class="text-3xl md:text-5xl font-extrabold text-gray-900 mb-6 leading-tight group-hover:text-blue-600 transition-colors">
-                            <Link href="/artikel">{{ featuredArticle.title }}</Link>
+                            {{ featuredArticle.title }}
                         </h2>
                         <p class="text-gray-500 text-lg md:text-xl leading-relaxed mb-10">{{ featuredArticle.summary }}</p>
                         <div class="flex items-center justify-between border-t border-gray-100 pt-8 mt-auto">
                             <span class="text-sm font-bold text-gray-400 uppercase tracking-widest">{{ featuredArticle.date }}</span>
-                            <Link href="/artikel" class="w-14 h-14 rounded-full bg-gray-900 flex items-center justify-center text-white hover:bg-blue-600 transition-colors transform group-hover:translate-x-2 shadow-xl">
+                            <div class="w-14 h-14 rounded-full bg-gray-900 flex items-center justify-center text-white group-hover:bg-blue-600 transition-colors transform group-hover:translate-x-2 shadow-xl">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-6 h-6">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
                                 </svg>
-                            </Link>
+                            </div>
                         </div>
                     </div>
-                </div>
+                </Link>
 
                 <!-- Standard Articles Grid -->
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-                    <article v-for="news in articles" :key="news.id" class="flex flex-col bg-white rounded-[2.5rem] overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-500 border border-gray-100 group">
+                    <Link v-for="news in articles" :key="news.id" :href="'/artikel/baca?img=' + encodeURIComponent(news.image) + '&title=' + encodeURIComponent(news.title) + '&category=' + encodeURIComponent(news.category) + '&summary=' + encodeURIComponent(news.summary)" class="flex flex-col bg-white rounded-[2.5rem] overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-500 border border-gray-100 group">
                         <div class="relative h-72 overflow-hidden">
                             <img :src="news.image" :alt="news.title" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700" />
                             <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-60 group-hover:opacity-80 transition-opacity"></div>
@@ -103,22 +103,22 @@ const articles = [
                         </div>
                         <div class="p-8 md:p-10 flex-1 flex flex-col">
                             <h4 class="text-2xl md:text-3xl font-extrabold text-gray-900 mb-4 group-hover:text-blue-600 transition-colors leading-tight">
-                                <Link href="/artikel">{{ news.title }}</Link>
+                                {{ news.title }}
                             </h4>
                             <p class="text-gray-500 text-lg flex-1 mb-8 leading-relaxed">
                                 {{ news.summary }}
                             </p>
                             <div class="flex items-center justify-between mt-auto pt-6 border-t border-gray-100">
                                 <span class="text-xs font-bold text-gray-400 uppercase tracking-widest">{{ news.date }}</span>
-                                <Link href="/artikel" class="inline-flex items-center text-gray-900 group-hover:text-blue-600 transition-colors font-bold uppercase tracking-widest text-sm">
+                                <div class="inline-flex items-center text-gray-900 group-hover:text-blue-600 transition-colors font-bold uppercase tracking-widest text-sm">
                                     Baca Kisah
                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor" class="w-4 h-4 ml-2 transform group-hover:translate-x-2 transition-transform">
                                         <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
                                     </svg>
-                                </Link>
+                                </div>
                             </div>
                         </div>
-                    </article>
+                    </Link>
                 </div>
 
                 <div class="text-center mt-20">
