@@ -1,0 +1,27 @@
+<?php
+
+namespace App\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+
+class Program extends Model
+{
+    use HasFactory;
+
+    protected $table = 'program';
+
+    protected $fillable = [
+        'judul',
+        'deskripsi',
+        'ikon',
+        'warna_tema',
+        'urutan',
+        'aktif',
+    ];
+
+    protected $casts = [
+        'aktif' => 'boolean',
+        'urutan' => 'integer',
+    ];
+}
