@@ -3,7 +3,22 @@ import { Head, Link } from '@inertiajs/vue3';
 import Navbar from '../components/Navbar.vue';
 import Footer from '../components/Footer.vue';
 
-const milestones = [
+import { computed } from 'vue';
+
+const props = defineProps<{
+    milestones?: Array<{
+        id: number;
+        tahun: string;
+        judul: string;
+        deskripsi: string;
+        gambar?: string;
+        warna_teks?: string;
+        warna_latar?: string;
+        urutan?: number;
+    }>;
+}>();
+
+const defaultMilestones = [
     {
         year: '2009',
         title: 'Awal Mula Pendirian',
@@ -37,6 +52,18 @@ const milestones = [
         bgColor: 'bg-amber-600',
     }
 ];
+
+const milestoneItems = computed(() => {
+    if (!props.milestones || props.milestones.length === 0) return defaultMilestones;
+    return props.milestones.map((item: any) => ({
+        year: item.tahun || item.year,
+        title: item.judul || item.title,
+        desc: item.deskripsi || item.desc,
+        image: item.gambar || item.image || '/assets/images/tanam-2.jpg',
+        textColor: item.warna_teks || item.textColor || 'text-blue-600',
+        bgColor: item.warna_latar || item.bgColor || 'bg-blue-600',
+    }));
+});
 </script>
 
 <template>
@@ -70,7 +97,7 @@ const milestones = [
             <!-- Alternating Timeline Sections -->
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-8">
                 
-                <div v-for="(item, index) in milestones" :key="index" class="mb-32 last:mb-0">
+                <div v-for="(item, index) in milestoneItems" :key="index" class="mb-32 last:mb-0">
                     <div :class="['flex flex-col gap-12 lg:gap-24 items-center', index % 2 === 0 ? 'lg:flex-row' : 'lg:flex-row-reverse']">
                         
                         <!-- Image Side -->

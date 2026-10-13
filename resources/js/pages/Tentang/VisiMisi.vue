@@ -3,7 +3,25 @@ import { Head, Link } from '@inertiajs/vue3';
 import Navbar from '../components/Navbar.vue';
 import Footer from '../components/Footer.vue';
 
-const missions = [
+import { computed } from 'vue';
+
+const props = defineProps<{
+    visi?: string;
+    missions?: Array<{
+        id: number;
+        judul: string;
+        deskripsi: string;
+        warna_teks?: string;
+        warna_latar?: string;
+        urutan?: number;
+    }>;
+}>();
+
+const displayVisi = computed(() => {
+    return props.visi || 'Menjadi lembaga yang mencetak generasi Mandiri, Cerdas, & Berakhlak Mulia serta memberikan dampak nyata bagi masyarakat luas.';
+});
+
+const defaultMissions = [
     {
         id: 1,
         title: 'Pendidikan Berkualitas',
@@ -33,6 +51,17 @@ const missions = [
         bgColor: 'bg-amber-600',
     }
 ];
+
+const missionItems = computed(() => {
+    if (!props.missions || props.missions.length === 0) return defaultMissions;
+    return props.missions.map((m: any) => ({
+        id: m.id,
+        title: m.judul || m.title,
+        desc: m.deskripsi || m.desc,
+        color: m.warna_teks || m.color || 'text-blue-600',
+        bgColor: m.warna_latar || m.bgColor || 'bg-blue-600',
+    }));
+});
 </script>
 
 <template>
@@ -69,7 +98,7 @@ const missions = [
                         Visi Besar Kami
                     </span>
                     <h2 class="text-4xl md:text-5xl lg:text-6xl font-black text-white leading-tight md:leading-tight">
-                        "Menjadi lembaga yang mencetak generasi <span class="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-teal-300">Mandiri, Cerdas, & Berakhlak Mulia</span> serta memberikan dampak nyata bagi masyarakat luas."
+                        "{{ displayVisi }}"
                     </h2>
                 </div>
             </div>
@@ -83,13 +112,13 @@ const missions = [
                             <h3 class="text-5xl md:text-6xl font-extrabold text-gray-900 mb-6 leading-tight">Langkah <br/> Nyata</h3>
                             <div class="w-20 h-2 bg-blue-600 rounded-full mb-8"></div>
                             <p class="text-xl text-gray-500 leading-relaxed">
-                                Empat pilar utama yang menjadi pondasi setiap program edukasi dan kegiatan sosial di Raharja Mandiri.
+                                Pilar utama yang menjadi pondasi setiap program edukasi dan kegiatan sosial di Raharja Mandiri.
                             </p>
                         </div>
                     </div>
                     
                     <div class="w-full md:w-2/3 space-y-10">
-                        <div v-for="(misi, index) in missions" :key="misi.id" class="group bg-white p-10 md:p-12 rounded-[2.5rem] shadow-xl border border-gray-100 hover:shadow-2xl transition-all duration-500 flex flex-col sm:flex-row gap-8 relative overflow-hidden">
+                        <div v-for="(misi, index) in missionItems" :key="misi.id" class="group bg-white p-10 md:p-12 rounded-[2.5rem] shadow-xl border border-gray-100 hover:shadow-2xl transition-all duration-500 flex flex-col sm:flex-row gap-8 relative overflow-hidden">
                             <div :class="['absolute left-0 top-0 bottom-0 w-3 transition-all duration-500 group-hover:w-6', misi.bgColor]"></div>
                             <div class="w-16 h-16 shrink-0">
                                 <span :class="['text-6xl font-black opacity-20 group-hover:opacity-100 transition-opacity duration-500', misi.color]">0{{ index + 1 }}</span>

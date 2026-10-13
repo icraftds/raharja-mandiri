@@ -3,7 +3,20 @@ import { Head, Link } from '@inertiajs/vue3';
 import Navbar from '../components/Navbar.vue';
 import Footer from '../components/Footer.vue';
 
-const team = [
+import { computed } from 'vue';
+
+const props = defineProps<{
+    team?: Array<{
+        id: number;
+        nama: string;
+        jabatan: string;
+        foto?: string;
+        urutan?: number;
+        aktif?: boolean;
+    }>;
+}>();
+
+const defaultTeam = [
     {
         id: 1,
         name: 'H. Ahmad Sudirman, M.Ag',
@@ -41,6 +54,16 @@ const team = [
         image: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80',
     }
 ];
+
+const teamItems = computed(() => {
+    if (!props.team || props.team.length === 0) return defaultTeam;
+    return props.team.map((person: any) => ({
+        id: person.id,
+        name: person.nama || person.name,
+        role: person.jabatan || person.role,
+        image: person.foto || person.image || '/assets/images/relawan-1.jpg',
+    }));
+});
 </script>
 
 <template>
@@ -73,7 +96,7 @@ const team = [
                 
                 <!-- Grid Kepengurusan Cinematic -->
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                    <div v-for="person in team" :key="person.id" class="group relative rounded-[2.5rem] overflow-hidden shadow-2xl h-[450px] lg:h-[500px]">
+                    <div v-for="person in teamItems" :key="person.id" class="group relative rounded-[2.5rem] overflow-hidden shadow-2xl h-[450px] lg:h-[500px]">
                         <!-- Image with grayscale effect by default, color on hover -->
                         <img :src="person.image" :alt="person.name" class="absolute inset-0 w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-1000 grayscale group-hover:grayscale-0" />
                         

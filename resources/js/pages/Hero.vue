@@ -2,12 +2,59 @@
 import { Head, Link } from '@inertiajs/vue3';
 import Navbar from './components/Navbar.vue';
 import Footer from './components/Footer.vue';
+import { computed } from 'vue';
 
-// Dummy data for news
-const latestNews = [
+const props = defineProps<{
+    hero?: {
+        badge?: string;
+        titleTop?: string;
+        titleBottom?: string;
+        description?: string;
+        image?: string;
+    };
+    about?: {
+        badge?: string;
+        title?: string;
+        image?: string;
+        paragraph1?: string;
+        paragraph2?: string;
+        countChildren?: string;
+        labelChildren?: string;
+        countYears?: string;
+        labelYears?: string;
+    };
+    programs?: Array<{
+        id: number;
+        judul: string;
+        deskripsi: string;
+        warna_tema?: string;
+    }>;
+    partners?: Array<{
+        nama: string;
+        kategori: string;
+        tipe_ikon?: string;
+    }>;
+    galleryHighlights?: Array<{
+        id: number;
+        gambar: string;
+        judul: string;
+    }>;
+    latestNews?: Array<{
+        id: number;
+        title: string;
+        slug: string;
+        date: string;
+        summary: string;
+        image: string;
+    }>;
+}>();
+
+// Fallback dummy data jika props belum termuat
+const defaultNews = [
     {
         id: 1,
         title: 'Bantuan Pendidikan Semester Ganjil',
+        slug: 'bantuan-pendidikan-semester-ganjil-2026',
         date: '10 Okt 2026',
         summary: 'Penyaluran dana bantuan pendidikan untuk 50 anak asuh di tingkat SD dan SMP.',
         image: '/assets/images/relawan-1.jpg',
@@ -15,6 +62,7 @@ const latestNews = [
     {
         id: 2,
         title: 'Kunjungan Komunitas Berbagi Kasih',
+        slug: 'kunjungan-komunitas-berbagi-kasih',
         date: '05 Okt 2026',
         summary: 'Kegiatan bermain dan belajar bersama kakak-kakak dari komunitas Berbagi Kasih.',
         image: '/assets/images/relawan-2.jpg',
@@ -22,55 +70,43 @@ const latestNews = [
     {
         id: 3,
         title: 'Pembangunan Ruang Belajar Baru',
+        slug: 'pembangunan-ruang-belajar-baru',
         date: '28 Sep 2026',
         summary: 'Proses peletakan batu pertama untuk ruang belajar tambahan bagi anak-anak panti.',
         image: '/assets/images/tanam-1.jpg',
     }
 ];
 
+const newsItems = computed(() => {
+    return props.latestNews && props.latestNews.length > 0 ? props.latestNews : defaultNews;
+});
+
 // Mitra Kerja & Kolaborasi
-const partners = [
-    {
-        name: 'Pemerintah Daerah',
-        category: 'Kabupaten Sumedang',
-        type: 'pemda',
-    },
-    {
-        name: 'Dinas Sosial',
-        category: 'Provinsi Jawa Barat',
-        type: 'dinsos',
-    },
-    {
-        name: 'RS Mitra Keluarga',
-        category: 'Layanan Medis & Anak',
-        type: 'hospital',
-    },
-    {
-        name: 'Komunitas Peduli',
-        category: 'Relawan & Sahabat Kasih',
-        type: 'community',
-    },
-    {
-        name: 'Donatur Perusahaan',
-        category: 'Program CSR Mitra',
-        type: 'csr',
-    },
-    {
-        name: 'BAZNAS',
-        category: 'Badan Amil Zakat',
-        type: 'baznas',
-    },
-    {
-        name: 'Kitabisa',
-        category: 'Platform Solidaritas',
-        type: 'kitabisa',
-    },
-    {
-        name: 'PMI Sumedang',
-        category: 'Palang Merah Indonesia',
-        type: 'pmi',
-    },
+const defaultPartners = [
+    { nama: 'Pemerintah Daerah', kategori: 'Kabupaten Sumedang', tipe_ikon: 'pemda' },
+    { nama: 'Dinas Sosial', kategori: 'Provinsi Jawa Barat', tipe_ikon: 'dinsos' },
+    { nama: 'RS Mitra Keluarga', kategori: 'Layanan Medis & Anak', tipe_ikon: 'hospital' },
+    { nama: 'Komunitas Peduli', kategori: 'Relawan & Sahabat Kasih', tipe_ikon: 'community' },
+    { nama: 'Donatur Perusahaan', kategori: 'Program CSR Mitra', tipe_ikon: 'csr' },
+    { nama: 'BAZNAS', kategori: 'Badan Amil Zakat', tipe_ikon: 'baznas' },
+    { nama: 'Kitabisa', kategori: 'Platform Solidaritas', tipe_ikon: 'kitabisa' },
+    { nama: 'PMI Sumedang', kategori: 'Palang Merah Indonesia', tipe_ikon: 'pmi' },
 ];
+
+const partnerItems = computed(() => {
+    return props.partners && props.partners.length > 0 ? props.partners : defaultPartners;
+});
+
+const defaultGallery = [
+    { id: 1, gambar: '/assets/images/sepatu-3.jpg', judul: 'Kegiatan Belajar' },
+    { id: 2, gambar: '/assets/images/bukber-1.jpg', judul: 'Bantuan Sosial' },
+    { id: 3, gambar: '/assets/images/tanam-4.jpg', judul: 'Bermain Bersama' },
+    { id: 4, gambar: '/assets/images/relawan-4.jpg', judul: 'Makan Bersama' },
+];
+
+const galleryItems = computed(() => {
+    return props.galleryHighlights && props.galleryHighlights.length > 0 ? props.galleryHighlights : defaultGallery;
+});
 </script>
 
 <template>
@@ -83,19 +119,19 @@ const partners = [
         <!-- Hero Section -->
         <section class="relative h-screen flex items-center justify-center overflow-hidden">
             <div class="absolute inset-0 z-0">
-                <img src="/assets/images/sepatu-1.jpg" alt="Anak-anak Panti Sosial" class="w-full h-full object-cover" />
+                <img :src="hero?.image || '/assets/images/sepatu-1.jpg'" alt="Anak-anak Panti Sosial" class="w-full h-full object-cover" />
                 <div class="absolute inset-0 bg-gradient-to-b from-blue-900/80 via-black/50 to-black/80"></div>
             </div>
             
             <div class="relative z-10 text-center px-4 max-w-4xl mx-auto mt-20">
                 <span class="inline-block py-1 px-3 rounded-full bg-blue-500/30 text-blue-200 backdrop-blur-sm border border-blue-500/40 text-sm font-semibold tracking-wider mb-6 animate-fade-in-up">
-                    Wujudkan Harapan Mereka
+                    {{ hero?.badge || 'Wujudkan Harapan Mereka' }}
                 </span>
                 <h1 class="text-4xl md:text-6xl font-extrabold text-white mb-6 leading-tight drop-shadow-lg">
-                    Bersama Berbagi Kasih,<br/> Membangun Masa Depan
+                    {{ hero?.titleTop || 'Bersama Berbagi Kasih,' }}<br/> {{ hero?.titleBottom || 'Membangun Masa Depan' }}
                 </h1>
                 <p class="text-lg md:text-xl text-gray-200 mb-10 max-w-2xl mx-auto drop-shadow-md leading-relaxed">
-                    Panti Sosial Raharja Mandiri (PSRM) berdedikasi untuk memberikan kehidupan yang lebih baik, pendidikan yang layak, dan lingkungan penuh kasih bagi anak-anak di Tanjungsari, Sumedang.
+                    {{ hero?.description || 'Panti Sosial Raharja Mandiri (PSRM) berdedikasi untuk memberikan kehidupan yang lebih baik, pendidikan yang layak, dan lingkungan penuh kasih bagi anak-anak di Tanjungsari, Sumedang.' }}
                 </p>
                 
                 <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
@@ -115,32 +151,32 @@ const partners = [
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
                     <div class="relative">
                         <div class="aspect-square rounded-3xl overflow-hidden shadow-2xl relative z-10">
-                            <img src="/assets/images/tanam-3.jpg" alt="Tentang Kami" class="w-full h-full object-cover" />
+                            <img :src="about?.image || '/assets/images/tanam-3.jpg'" alt="Tentang Kami" class="w-full h-full object-cover" />
                         </div>
                         <div class="absolute -bottom-8 -right-8 w-64 h-64 bg-blue-100 rounded-full -z-0"></div>
                         <div class="absolute -top-8 -left-8 w-32 h-32 bg-pink-100 rounded-full -z-0"></div>
                     </div>
                     
                     <div>
-                        <h2 class="text-blue-600 font-bold tracking-wide uppercase text-sm mb-2">Tentang Kami</h2>
+                        <h2 class="text-blue-600 font-bold tracking-wide uppercase text-sm mb-2">{{ about?.badge || 'Tentang Kami' }}</h2>
                         <h3 class="text-3xl md:text-4xl font-bold text-gray-900 mb-6 leading-tight">
-                            Rumah Kedua yang Penuh dengan Kehangatan
+                            {{ about?.title || 'Rumah Kedua yang Penuh dengan Kehangatan' }}
                         </h3>
                         <p class="text-gray-600 text-lg mb-6 leading-relaxed">
-                            Panti Sosial Raharja Mandiri hadir di Tanjungsari, Sumedang sebagai wadah untuk merangkul anak-anak yatim piatu dan dhuafa. Kami berkomitmen memberikan lingkungan yang aman, mendidik, dan penuh kasih sayang.
+                            {{ about?.paragraph1 || 'Panti Sosial Raharja Mandiri hadir di Tanjungsari, Sumedang sebagai wadah untuk merangkul anak-anak yatim piatu dan dhuafa. Kami berkomitmen memberikan lingkungan yang aman, mendidik, dan penuh kasih sayang.' }}
                         </p>
                         <p class="text-gray-600 text-lg mb-8 leading-relaxed">
-                            Visi kami adalah membentuk generasi yang mandiri, cerdas, dan berakhlak mulia. Bersama kita bisa memberikan mereka kesempatan yang setara untuk meraih cita-cita.
+                            {{ about?.paragraph2 || 'Visi kami adalah membentuk generasi yang mandiri, cerdas, dan berakhlak mulia. Bersama kita bisa memberikan mereka kesempatan yang setara untuk meraih cita-cita.' }}
                         </p>
                         
                         <div class="grid grid-cols-2 gap-6 mb-8">
                             <div class="border-l-4 border-blue-500 pl-4">
-                                <p class="text-4xl font-black text-gray-900">120+</p>
-                                <p class="text-sm text-gray-500 font-medium mt-1">Anak Asuh</p>
+                                <p class="text-4xl font-black text-gray-900">{{ about?.countChildren || '120+' }}</p>
+                                <p class="text-sm text-gray-500 font-medium mt-1">{{ about?.labelChildren || 'Anak Asuh' }}</p>
                             </div>
                             <div class="border-l-4 border-pink-500 pl-4">
-                                <p class="text-4xl font-black text-gray-900">15</p>
-                                <p class="text-sm text-gray-500 font-medium mt-1">Tahun Berdiri</p>
+                                <p class="text-4xl font-black text-gray-900">{{ about?.countYears || '15' }}</p>
+                                <p class="text-sm text-gray-500 font-medium mt-1">{{ about?.labelYears || 'Tahun Berdiri' }}</p>
                             </div>
                         </div>
                         
@@ -172,17 +208,8 @@ const partners = [
                 </div>
                 
                 <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-                    <div class="aspect-square rounded-2xl overflow-hidden group shadow-sm">
-                        <img src="/assets/images/sepatu-3.jpg" alt="Kegiatan Belajar" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500" />
-                    </div>
-                    <div class="aspect-square rounded-2xl overflow-hidden group shadow-sm">
-                        <img src="/assets/images/bukber-1.jpg" alt="Bantuan Sosial" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500" />
-                    </div>
-                    <div class="aspect-square rounded-2xl overflow-hidden group shadow-sm">
-                        <img src="/assets/images/tanam-4.jpg" alt="Bermain Bersama" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500" />
-                    </div>
-                    <div class="aspect-square rounded-2xl overflow-hidden group shadow-sm">
-                        <img src="/assets/images/relawan-4.jpg" alt="Makan Bersama" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500" />
+                    <div v-for="item in galleryItems" :key="item.id" class="aspect-square rounded-2xl overflow-hidden group shadow-sm">
+                        <img :src="item.gambar" :alt="item.judul || 'Momen Panti'" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500" />
                     </div>
                 </div>
                 
@@ -271,21 +298,23 @@ const partners = [
                     <!-- Track 1 -->
                     <div class="flex items-center gap-5 pr-5">
                         <div 
-                            v-for="(partner, idx) in partners" 
+                            v-for="(partner, idx) in partnerItems" 
                             :key="'track1-' + idx"
                             class="flex items-center gap-3.5 px-5 py-3.5 rounded-2xl bg-gray-50/90 hover:bg-white border border-gray-200/80 hover:border-blue-400 hover:shadow-lg shadow-xs transition-all duration-300 group/partner whitespace-nowrap"
                         >
                             <!-- Logo Icon Container -->
                             <div class="w-11 h-11 rounded-xl flex items-center justify-center transition-transform duration-300 group-hover/partner:scale-110 shadow-xs flex-shrink-0">
+                                <img v-if="(partner as any).logo" :src="(partner as any).logo" :alt="(partner as any).nama || (partner as any).name" class="w-8 h-8 object-contain" />
+                                
                                 <!-- Pemda -->
-                                <svg v-if="partner.type === 'pemda'" class="w-9 h-9" viewBox="0 0 40 40" fill="none">
+                                <svg v-else-if="((partner as any).tipe_ikon || (partner as any).type) === 'pemda'" class="w-9 h-9" viewBox="0 0 40 40" fill="none">
                                     <path d="M20 5L31 9.5V18C31 25.5 26.5 31 20 34C13.5 31 9 25.5 9 18V9.5L20 5Z" fill="#1E40AF" stroke="#3B82F6" stroke-width="1.5"/>
                                     <path d="M20 11L21.8 15.2H26.2L22.6 17.8L24 22L20 19.5L16 22L17.4 17.8L13.8 15.2H18.2L20 11Z" fill="#FBBF24"/>
                                     <path d="M14 24.5C15.8 26.5 17.8 27.5 20 27.5C22.2 27.5 24.2 26.5 26 24.5" stroke="#93C5FD" stroke-width="1.8" stroke-linecap="round"/>
                                 </svg>
 
                                 <!-- Dinsos -->
-                                <svg v-else-if="partner.type === 'dinsos'" class="w-9 h-9" viewBox="0 0 40 40" fill="none">
+                                <svg v-else-if="((partner as any).tipe_ikon || (partner as any).type) === 'dinsos'" class="w-9 h-9" viewBox="0 0 40 40" fill="none">
                                     <circle cx="20" cy="20" r="16" fill="#FEF3C7" stroke="#F59E0B" stroke-width="1.5"/>
                                     <path d="M20 10C17.5 10 14 13 14 16.5C14 21 20 25 20 25C20 25 26 21 26 16.5C26 13 22.5 10 20 10Z" fill="#DC2626"/>
                                     <path d="M11 22C12.5 26.5 16 29 20 29C24 29 27.5 26.5 29 22" stroke="#D97706" stroke-width="2" stroke-linecap="round"/>
@@ -293,7 +322,7 @@ const partners = [
                                 </svg>
 
                                 <!-- RS Mitra Keluarga -->
-                                <svg v-else-if="partner.type === 'hospital'" class="w-9 h-9" viewBox="0 0 40 40" fill="none">
+                                <svg v-else-if="((partner as any).tipe_ikon || (partner as any).type) === 'hospital'" class="w-9 h-9" viewBox="0 0 40 40" fill="none">
                                     <rect x="5" y="5" width="30" height="30" rx="10" fill="#ECFDF5" stroke="#10B981" stroke-width="1.5"/>
                                     <path d="M17 11H23V17H29V23H23V29H17V23H11V17H17V11Z" fill="#059669"/>
                                     <path d="M20 16.5V23.5M16.5 20H23.5" stroke="#FFFFFF" stroke-width="1.5" stroke-linecap="round"/>
@@ -301,7 +330,7 @@ const partners = [
                                 </svg>
 
                                 <!-- Komunitas Peduli -->
-                                <svg v-else-if="partner.type === 'community'" class="w-9 h-9" viewBox="0 0 40 40" fill="none">
+                                <svg v-else-if="((partner as any).tipe_ikon || (partner as any).type) === 'community'" class="w-9 h-9" viewBox="0 0 40 40" fill="none">
                                     <circle cx="20" cy="20" r="15" fill="#FDF2F8" stroke="#F472B6" stroke-width="1.5"/>
                                     <circle cx="20" cy="12" r="2.8" fill="#EC4899"/>
                                     <circle cx="12.5" cy="23" r="2.8" fill="#8B5CF6"/>
@@ -311,7 +340,7 @@ const partners = [
                                 </svg>
 
                                 <!-- Donatur Perusahaan -->
-                                <svg v-else-if="partner.type === 'csr'" class="w-9 h-9" viewBox="0 0 40 40" fill="none">
+                                <svg v-else-if="((partner as any).tipe_ikon || (partner as any).type) === 'csr'" class="w-9 h-9" viewBox="0 0 40 40" fill="none">
                                     <rect x="5" y="5" width="30" height="30" rx="10" fill="#EEF2FF" stroke="#6366F1" stroke-width="1.5"/>
                                     <path d="M20 9L29 14.5V25.5L20 31L11 25.5V14.5L20 9Z" fill="#4F46E5" fill-opacity="0.2" stroke="#4F46E5" stroke-width="1.5"/>
                                     <path d="M20 9V31M11 14.5L29 25.5M11 25.5L29 14.5" stroke="#818CF8" stroke-width="1.2"/>
@@ -319,7 +348,7 @@ const partners = [
                                 </svg>
 
                                 <!-- BAZNAS -->
-                                <svg v-else-if="partner.type === 'baznas'" class="w-9 h-9" viewBox="0 0 40 40" fill="none">
+                                <svg v-else-if="((partner as any).tipe_ikon || (partner as any).type) === 'baznas'" class="w-9 h-9" viewBox="0 0 40 40" fill="none">
                                     <rect x="5" y="5" width="30" height="30" rx="10" fill="#F0FDF4" stroke="#22C55E" stroke-width="1.5"/>
                                     <rect x="13" y="13" width="14" height="14" rx="2" fill="#16A34A" fill-opacity="0.25" transform="rotate(45 20 20)" stroke="#16A34A" stroke-width="1.4"/>
                                     <rect x="13" y="13" width="14" height="14" rx="2" fill="#15803D" fill-opacity="0.15" stroke="#15803D" stroke-width="1.4"/>
@@ -327,14 +356,14 @@ const partners = [
                                 </svg>
 
                                 <!-- Kitabisa -->
-                                <svg v-else-if="partner.type === 'kitabisa'" class="w-9 h-9" viewBox="0 0 40 40" fill="none">
+                                <svg v-else-if="((partner as any).tipe_ikon || (partner as any).type) === 'kitabisa'" class="w-9 h-9" viewBox="0 0 40 40" fill="none">
                                     <rect x="5" y="5" width="30" height="30" rx="10" fill="#F0F9FF" stroke="#0284C7" stroke-width="1.5"/>
                                     <path d="M20 28C20 28 10 21.5 10 15C10 11.5 12.8 9 16 9C18.2 9 19.4 10.2 20 11.2C20.6 10.2 21.8 9 24 9C27.2 9 30 11.5 30 15C30 21.5 20 28 20 28Z" fill="#0284C7"/>
                                     <circle cx="20" cy="17" r="2.5" fill="#BAE6FD"/>
                                 </svg>
 
                                 <!-- PMI -->
-                                <svg v-else-if="partner.type === 'pmi'" class="w-9 h-9" viewBox="0 0 40 40" fill="none">
+                                <svg v-else class="w-9 h-9" viewBox="0 0 40 40" fill="none">
                                     <circle cx="20" cy="20" r="15" fill="#FFF1F2" stroke="#E11D48" stroke-width="1.5"/>
                                     <path d="M17.5 11.5H22.5V17.5H28.5V22.5H22.5V28.5H17.5V22.5H11.5V17.5H17.5V11.5Z" fill="#E11D48"/>
                                 </svg>
@@ -343,10 +372,10 @@ const partners = [
                             <!-- Partner Details -->
                             <div class="text-left">
                                 <h4 class="text-sm sm:text-base font-bold text-gray-800 group-hover/partner:text-blue-600 transition-colors tracking-tight">
-                                    {{ partner.name }}
+                                    {{ (partner as any).nama || (partner as any).name }}
                                 </h4>
                                 <p class="text-[11px] sm:text-xs font-medium text-gray-400 group-hover/partner:text-gray-500 transition-colors">
-                                    {{ partner.category }}
+                                    {{ (partner as any).kategori || (partner as any).category }}
                                 </p>
                             </div>
                         </div>
@@ -355,21 +384,23 @@ const partners = [
                     <!-- Track 2 (Duplicated for Seamless Infinite Loop) -->
                     <div class="flex items-center gap-5 pr-5" aria-hidden="true">
                         <div 
-                            v-for="(partner, idx) in partners" 
+                            v-for="(partner, idx) in partnerItems" 
                             :key="'track2-' + idx"
                             class="flex items-center gap-3.5 px-5 py-3.5 rounded-2xl bg-gray-50/90 hover:bg-white border border-gray-200/80 hover:border-blue-400 hover:shadow-lg shadow-xs transition-all duration-300 group/partner whitespace-nowrap"
                         >
                             <!-- Logo Icon Container -->
                             <div class="w-11 h-11 rounded-xl flex items-center justify-center transition-transform duration-300 group-hover/partner:scale-110 shadow-xs flex-shrink-0">
+                                <img v-if="(partner as any).logo" :src="(partner as any).logo" :alt="(partner as any).nama || (partner as any).name" class="w-8 h-8 object-contain" />
+                                
                                 <!-- Pemda -->
-                                <svg v-if="partner.type === 'pemda'" class="w-9 h-9" viewBox="0 0 40 40" fill="none">
+                                <svg v-else-if="((partner as any).tipe_ikon || (partner as any).type) === 'pemda'" class="w-9 h-9" viewBox="0 0 40 40" fill="none">
                                     <path d="M20 5L31 9.5V18C31 25.5 26.5 31 20 34C13.5 31 9 25.5 9 18V9.5L20 5Z" fill="#1E40AF" stroke="#3B82F6" stroke-width="1.5"/>
                                     <path d="M20 11L21.8 15.2H26.2L22.6 17.8L24 22L20 19.5L16 22L17.4 17.8L13.8 15.2H18.2L20 11Z" fill="#FBBF24"/>
                                     <path d="M14 24.5C15.8 26.5 17.8 27.5 20 27.5C22.2 27.5 24.2 26.5 26 24.5" stroke="#93C5FD" stroke-width="1.8" stroke-linecap="round"/>
                                 </svg>
 
                                 <!-- Dinsos -->
-                                <svg v-else-if="partner.type === 'dinsos'" class="w-9 h-9" viewBox="0 0 40 40" fill="none">
+                                <svg v-else-if="((partner as any).tipe_ikon || (partner as any).type) === 'dinsos'" class="w-9 h-9" viewBox="0 0 40 40" fill="none">
                                     <circle cx="20" cy="20" r="16" fill="#FEF3C7" stroke="#F59E0B" stroke-width="1.5"/>
                                     <path d="M20 10C17.5 10 14 13 14 16.5C14 21 20 25 20 25C20 25 26 21 26 16.5C26 13 22.5 10 20 10Z" fill="#DC2626"/>
                                     <path d="M11 22C12.5 26.5 16 29 20 29C24 29 27.5 26.5 29 22" stroke="#D97706" stroke-width="2" stroke-linecap="round"/>
@@ -377,7 +408,7 @@ const partners = [
                                 </svg>
 
                                 <!-- RS Mitra Keluarga -->
-                                <svg v-else-if="partner.type === 'hospital'" class="w-9 h-9" viewBox="0 0 40 40" fill="none">
+                                <svg v-else-if="((partner as any).tipe_ikon || (partner as any).type) === 'hospital'" class="w-9 h-9" viewBox="0 0 40 40" fill="none">
                                     <rect x="5" y="5" width="30" height="30" rx="10" fill="#ECFDF5" stroke="#10B981" stroke-width="1.5"/>
                                     <path d="M17 11H23V17H29V23H23V29H17V23H11V17H17V11Z" fill="#059669"/>
                                     <path d="M20 16.5V23.5M16.5 20H23.5" stroke="#FFFFFF" stroke-width="1.5" stroke-linecap="round"/>
@@ -385,7 +416,7 @@ const partners = [
                                 </svg>
 
                                 <!-- Komunitas Peduli -->
-                                <svg v-else-if="partner.type === 'community'" class="w-9 h-9" viewBox="0 0 40 40" fill="none">
+                                <svg v-else-if="((partner as any).tipe_ikon || (partner as any).type) === 'community'" class="w-9 h-9" viewBox="0 0 40 40" fill="none">
                                     <circle cx="20" cy="20" r="15" fill="#FDF2F8" stroke="#F472B6" stroke-width="1.5"/>
                                     <circle cx="20" cy="12" r="2.8" fill="#EC4899"/>
                                     <circle cx="12.5" cy="23" r="2.8" fill="#8B5CF6"/>
@@ -395,7 +426,7 @@ const partners = [
                                 </svg>
 
                                 <!-- Donatur Perusahaan -->
-                                <svg v-else-if="partner.type === 'csr'" class="w-9 h-9" viewBox="0 0 40 40" fill="none">
+                                <svg v-else-if="((partner as any).tipe_ikon || (partner as any).type) === 'csr'" class="w-9 h-9" viewBox="0 0 40 40" fill="none">
                                     <rect x="5" y="5" width="30" height="30" rx="10" fill="#EEF2FF" stroke="#6366F1" stroke-width="1.5"/>
                                     <path d="M20 9L29 14.5V25.5L20 31L11 25.5V14.5L20 9Z" fill="#4F46E5" fill-opacity="0.2" stroke="#4F46E5" stroke-width="1.5"/>
                                     <path d="M20 9V31M11 14.5L29 25.5M11 25.5L29 14.5" stroke="#818CF8" stroke-width="1.2"/>
@@ -403,7 +434,7 @@ const partners = [
                                 </svg>
 
                                 <!-- BAZNAS -->
-                                <svg v-else-if="partner.type === 'baznas'" class="w-9 h-9" viewBox="0 0 40 40" fill="none">
+                                <svg v-else-if="((partner as any).tipe_ikon || (partner as any).type) === 'baznas'" class="w-9 h-9" viewBox="0 0 40 40" fill="none">
                                     <rect x="5" y="5" width="30" height="30" rx="10" fill="#F0FDF4" stroke="#22C55E" stroke-width="1.5"/>
                                     <rect x="13" y="13" width="14" height="14" rx="2" fill="#16A34A" fill-opacity="0.25" transform="rotate(45 20 20)" stroke="#16A34A" stroke-width="1.4"/>
                                     <rect x="13" y="13" width="14" height="14" rx="2" fill="#15803D" fill-opacity="0.15" stroke="#15803D" stroke-width="1.4"/>
@@ -411,14 +442,14 @@ const partners = [
                                 </svg>
 
                                 <!-- Kitabisa -->
-                                <svg v-else-if="partner.type === 'kitabisa'" class="w-9 h-9" viewBox="0 0 40 40" fill="none">
+                                <svg v-else-if="((partner as any).tipe_ikon || (partner as any).type) === 'kitabisa'" class="w-9 h-9" viewBox="0 0 40 40" fill="none">
                                     <rect x="5" y="5" width="30" height="30" rx="10" fill="#F0F9FF" stroke="#0284C7" stroke-width="1.5"/>
                                     <path d="M20 28C20 28 10 21.5 10 15C10 11.5 12.8 9 16 9C18.2 9 19.4 10.2 20 11.2C20.6 10.2 21.8 9 24 9C27.2 9 30 11.5 30 15C30 21.5 20 28 20 28Z" fill="#0284C7"/>
                                     <circle cx="20" cy="17" r="2.5" fill="#BAE6FD"/>
                                 </svg>
 
                                 <!-- PMI -->
-                                <svg v-else-if="partner.type === 'pmi'" class="w-9 h-9" viewBox="0 0 40 40" fill="none">
+                                <svg v-else class="w-9 h-9" viewBox="0 0 40 40" fill="none">
                                     <circle cx="20" cy="20" r="15" fill="#FFF1F2" stroke="#E11D48" stroke-width="1.5"/>
                                     <path d="M17.5 11.5H22.5V17.5H28.5V22.5H22.5V28.5H17.5V22.5H11.5V17.5H17.5V11.5Z" fill="#E11D48"/>
                                 </svg>
@@ -427,10 +458,10 @@ const partners = [
                             <!-- Partner Details -->
                             <div class="text-left">
                                 <h4 class="text-sm sm:text-base font-bold text-gray-800 group-hover/partner:text-blue-600 transition-colors tracking-tight">
-                                    {{ partner.name }}
+                                    {{ (partner as any).nama || (partner as any).name }}
                                 </h4>
                                 <p class="text-[11px] sm:text-xs font-medium text-gray-400 group-hover/partner:text-gray-500 transition-colors">
-                                    {{ partner.category }}
+                                    {{ (partner as any).kategori || (partner as any).category }}
                                 </p>
                             </div>
                         </div>
@@ -458,7 +489,7 @@ const partners = [
                 </div>
                 
                 <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
-                    <article v-for="news in latestNews" :key="news.id" class="flex flex-col bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 group">
+                    <article v-for="news in newsItems" :key="news.id" class="flex flex-col bg-white rounded-3xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 group">
                         <div class="relative h-64 overflow-hidden">
                             <img :src="news.image" :alt="news.title" class="w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-500" />
                             <!-- Instagram Icon overlay -->
@@ -471,12 +502,12 @@ const partners = [
                         <div class="p-6 flex-1 flex flex-col">
                             <span class="text-xs font-bold text-gray-500 mb-2 uppercase tracking-wider">{{ news.date }}</span>
                             <h4 class="text-xl font-bold text-gray-900 mb-3 group-hover:text-blue-600 transition-colors line-clamp-2">
-                                <Link href="/artikel">{{ news.title }}</Link>
+                                <Link :href="'/artikel/' + news.slug">{{ news.title }}</Link>
                             </h4>
                             <p class="text-gray-600 text-sm flex-1 line-clamp-3 mb-4">
                                 {{ news.summary }}
                             </p>
-                            <Link href="/artikel" class="inline-flex items-center gap-1 text-blue-600 text-sm font-bold mt-auto">
+                            <Link :href="'/artikel/' + news.slug" class="inline-flex items-center gap-1 text-blue-600 text-sm font-bold mt-auto">
                                 Baca selengkapnya
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-4 h-4">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" />
@@ -527,7 +558,7 @@ const partners = [
         <Footer />
 
         <!-- Floating WhatsApp Button -->
-        <a href="https://wa.me/6281322101618?text=Halo%20Pengurus%20Panti%20Sosial%20Raharja%20Mandiri,%20saya%20ingin%20bertanya%20seputar%20donasi." 
+        <a :href="'https://wa.me/' + ($page.props.pengaturanGlobal?.whatsapp_nomor || '6281322101618') + '?text=' + encodeURIComponent($page.props.pengaturanGlobal?.whatsapp_pesan || 'Halo Pengurus Panti Sosial Raharja Mandiri, saya ingin bertanya seputar donasi.')" 
            target="_blank"
            class="fixed bottom-6 right-6 bg-[#25D366] text-white p-4 rounded-full shadow-2xl hover:scale-110 transition-transform duration-300 z-50 flex items-center justify-center group"
            aria-label="Hubungi via WhatsApp">

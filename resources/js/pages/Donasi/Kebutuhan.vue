@@ -3,7 +3,22 @@ import { Head, Link } from '@inertiajs/vue3';
 import Navbar from '../components/Navbar.vue';
 import Footer from '../components/Footer.vue';
 
-const items = [
+import { computed } from 'vue';
+
+const props = defineProps<{
+    items?: Array<{
+        id: number;
+        name: string;
+        desc: string;
+        qty: string;
+        status: string;
+        color?: string;
+        bgColor?: string;
+        lightBg?: string;
+    }>;
+}>();
+
+const defaultItems = [
     { 
         id: 1, 
         name: 'Sembako Utama', 
@@ -45,6 +60,10 @@ const items = [
         lightBg: 'bg-teal-50' 
     },
 ];
+
+const itemList = computed(() => {
+    return props.items && props.items.length > 0 ? props.items : defaultItems;
+});
 </script>
 
 <template>
@@ -76,7 +95,7 @@ const items = [
             <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 -mt-8">
                 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-8 mb-20">
-                    <div v-for="item in items" :key="item.id" class="group relative bg-white rounded-[2.5rem] shadow-xl border border-gray-100 p-8 md:p-12 transform transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl overflow-hidden">
+                    <div v-for="item in itemList" :key="item.id" class="group relative bg-white rounded-[2.5rem] shadow-xl border border-gray-100 p-8 md:p-12 transform transition-all duration-500 hover:-translate-y-2 hover:shadow-2xl overflow-hidden">
                         
                         <!-- Accent Background Pattern -->
                         <div :class="['absolute top-0 right-0 w-32 h-32 rounded-bl-full -mr-8 -mt-8 transition-transform duration-700 group-hover:scale-[2.5]', item.lightBg]"></div>

@@ -1,7 +1,47 @@
 <script setup lang="ts">
-import { Head } from '@inertiajs/vue3';
+import { Head, useForm, usePage } from '@inertiajs/vue3';
 import Navbar from './components/Navbar.vue';
 import Footer from './components/Footer.vue';
+import { computed } from 'vue';
+
+const props = defineProps<{
+    contact?: {
+        address?: string;
+        phone?: string;
+        email?: string;
+        operationalHours?: string;
+        instagram?: string;
+        instagramUrl?: string;
+        mapsUrl?: string;
+    };
+}>();
+
+const page = usePage();
+
+const contactInfo = computed(() => ({
+    address: props.contact?.address || 'Tanjungsari, Kabupaten Sumedang, Jawa Barat, 45362',
+    phone: props.contact?.phone || '+62 813-2210-1618',
+    email: props.contact?.email || 'psrm@raharjamandiri.org',
+    operationalHours: props.contact?.operationalHours || 'Senin - Minggu (08:00 - 17:00)',
+    instagram: props.contact?.instagram || '@psrm_raharja_mandiri',
+    instagramUrl: props.contact?.instagramUrl || 'https://www.instagram.com/psrm_raharja_mandiri/',
+    mapsUrl: props.contact?.mapsUrl || 'https://maps.google.com/?q=Tanjungsari+Sumedang',
+}));
+
+const form = useForm({
+    nama: '',
+    kontak: '',
+    pesan: '',
+});
+
+const submit = () => {
+    form.post('/kontak', {
+        preserveScroll: true,
+        onSuccess: () => {
+            form.reset();
+        },
+    });
+};
 </script>
 
 <template>
@@ -44,7 +84,7 @@ import Footer from './components/Footer.vue';
                                     </div>
                                     <div>
                                         <h4 class="font-bold text-gray-900 mb-1">Alamat Lengkap</h4>
-                                        <p class="text-gray-600 leading-relaxed">Tanjungsari, Kabupaten Sumedang<br/>Jawa Barat, 45362</p>
+                                        <p class="text-gray-600 leading-relaxed whitespace-pre-line">{{ contactInfo.address }}</p>
                                     </div>
                                 </div>
                                 
@@ -54,7 +94,7 @@ import Footer from './components/Footer.vue';
                                     </div>
                                     <div>
                                         <h4 class="font-bold text-gray-900 mb-1">Telepon & WhatsApp</h4>
-                                        <p class="text-gray-600 leading-relaxed">+62 813-2210-1618<br/>Senin - Minggu (08:00 - 17:00)</p>
+                                        <p class="text-gray-600 leading-relaxed">{{ contactInfo.phone }}<br/>{{ contactInfo.operationalHours }}</p>
                                     </div>
                                 </div>
 
@@ -64,7 +104,7 @@ import Footer from './components/Footer.vue';
                                     </div>
                                     <div>
                                         <h4 class="font-bold text-gray-900 mb-1">Email</h4>
-                                        <p class="text-gray-600 leading-relaxed">psrm@raharjamandiri.org</p>
+                                        <a :href="'mailto:' + contactInfo.email" class="text-blue-600 hover:text-blue-700 leading-relaxed">{{ contactInfo.email }}</a>
                                     </div>
                                 </div>
 
@@ -74,7 +114,7 @@ import Footer from './components/Footer.vue';
                                     </div>
                                     <div>
                                         <h4 class="font-bold text-gray-900 mb-1">Instagram</h4>
-                                        <a href="https://www.instagram.com/psrm_raharja_mandiri/?hl=id" target="_blank" class="text-blue-600 hover:text-blue-700 leading-relaxed font-medium">@psrm_raharja_mandiri</a>
+                                        <a :href="contactInfo.instagramUrl" target="_blank" class="text-blue-600 hover:text-blue-700 leading-relaxed font-medium">{{ contactInfo.instagram }}</a>
                                     </div>
                                 </div>
                             </div>
@@ -84,7 +124,7 @@ import Footer from './components/Footer.vue';
                         <div class="w-full h-48 bg-gray-200 rounded-2xl overflow-hidden relative group">
                             <img src="https://images.unsplash.com/photo-1524661135-423995f22d0b?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80" alt="Peta Lokasi" class="w-full h-full object-cover opacity-60 group-hover:scale-105 transition-transform duration-500" />
                             <div class="absolute inset-0 flex items-center justify-center">
-                                <a href="https://maps.google.com/?q=Tanjungsari+Sumedang" target="_blank" class="px-6 py-2 bg-white text-gray-900 rounded-full font-bold shadow-lg hover:shadow-xl transition-all">Buka di Maps</a>
+                                <a :href="contactInfo.mapsUrl" target="_blank" class="px-6 py-2 bg-white text-gray-900 rounded-full font-bold shadow-lg hover:shadow-xl transition-all">Buka di Maps</a>
                             </div>
                         </div>
                     </div>
@@ -92,21 +132,34 @@ import Footer from './components/Footer.vue';
                     <!-- Form Panel -->
                     <div class="bg-white rounded-3xl shadow-xl border border-gray-100 p-8 md:p-10">
                         <h2 class="text-2xl font-bold text-gray-900 mb-6">Kirimkan Pesan</h2>
-                        <form @submit.prevent class="space-y-6">
+                        
+                        <!-- Flash Success Alert -->
+                        <div v-if="(page.props.flash as any)?.success" class="mb-6 p-4 rounded-2xl bg-green-50 border border-green-200 text-green-800 flex items-center gap-3">
+                            <svg class="w-5 h-5 text-green-600 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
+                            </svg>
+                            <span class="text-sm font-medium">{{ (page.props.flash as any).success }}</span>
+                        </div>
+
+                        <form @submit.prevent="submit" class="space-y-6">
                             <div>
                                 <label class="block text-sm font-bold text-gray-700 mb-2">Nama Lengkap</label>
-                                <input type="text" class="w-full px-5 py-3 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all outline-none" placeholder="Masukkan nama Anda" />
+                                <input v-model="form.nama" type="text" required class="w-full px-5 py-3 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all outline-none" placeholder="Masukkan nama Anda" />
+                                <span v-if="form.errors.nama" class="text-xs text-red-500 mt-1 block">{{ form.errors.nama }}</span>
                             </div>
                             <div>
-                                <label class="block text-sm font-bold text-gray-700 mb-2">Email / Telepon</label>
-                                <input type="text" class="w-full px-5 py-3 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all outline-none" placeholder="Alamat email atau nomor WA" />
+                                <label class="block text-sm font-bold text-gray-700 mb-2">Email / Telepon / WA</label>
+                                <input v-model="form.kontak" type="text" required class="w-full px-5 py-3 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all outline-none" placeholder="Alamat email atau nomor WA Anda" />
+                                <span v-if="form.errors.kontak" class="text-xs text-red-500 mt-1 block">{{ form.errors.kontak }}</span>
                             </div>
                             <div>
                                 <label class="block text-sm font-bold text-gray-700 mb-2">Pesan Anda</label>
-                                <textarea rows="4" class="w-full px-5 py-3 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all outline-none resize-none" placeholder="Apa yang ingin Anda sampaikan?"></textarea>
+                                <textarea v-model="form.pesan" rows="4" required class="w-full px-5 py-3 rounded-xl border border-gray-200 focus:border-blue-500 focus:ring-2 focus:ring-blue-200 transition-all outline-none resize-none" placeholder="Apa yang ingin Anda sampaikan?"></textarea>
+                                <span v-if="form.errors.pesan" class="text-xs text-red-500 mt-1 block">{{ form.errors.pesan }}</span>
                             </div>
-                            <button class="w-full py-4 bg-blue-600 text-white rounded-xl font-bold text-lg hover:bg-blue-700 transition-colors shadow-lg hover:shadow-blue-500/30">
-                                Kirim Pesan
+                            <button type="submit" :disabled="form.processing" class="w-full py-4 bg-blue-600 text-white rounded-xl font-bold text-lg hover:bg-blue-700 transition-colors shadow-lg hover:shadow-blue-500/30 disabled:opacity-50 flex items-center justify-center gap-2">
+                                <span v-if="form.processing">Mengirim Pesan...</span>
+                                <span v-else>Kirim Pesan</span>
                             </button>
                         </form>
                     </div>

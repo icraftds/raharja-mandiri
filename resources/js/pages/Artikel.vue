@@ -3,19 +3,44 @@ import { Head, Link } from '@inertiajs/vue3';
 import Navbar from './components/Navbar.vue';
 import Footer from './components/Footer.vue';
 
-const featuredArticle = {
+import { computed } from 'vue';
+
+const props = defineProps<{
+    featuredArticle?: {
+        id: number;
+        title: string;
+        slug: string;
+        date: string;
+        category: string;
+        summary: string;
+        image: string;
+    } | null;
+    articles?: Array<{
+        id: number;
+        title: string;
+        slug: string;
+        date: string;
+        category: string;
+        summary: string;
+        image: string;
+    }>;
+}>();
+
+const defaultFeatured = {
     id: 1,
     title: 'Bantuan Pendidikan Semester Ganjil 2026 Telah Berhasil Disalurkan',
+    slug: 'bantuan-pendidikan-semester-ganjil-2026',
     date: '10 Okt 2026',
     category: 'Pendidikan',
     summary: 'Penyaluran dana bantuan pendidikan untuk 50 anak asuh di tingkat SD dan SMP telah berhasil dilakukan berkat partisipasi seluruh donatur. Semangat belajar mereka kini semakin menyala terang dan menjadi bekal kuat untuk menyongsong masa depan.',
     image: '/assets/images/sepatu-2.jpg',
 };
 
-const articles = [
+const defaultArticles = [
     {
         id: 2,
         title: 'Kunjungan Komunitas Berbagi Kasih',
+        slug: 'kunjungan-komunitas-berbagi-kasih',
         date: '05 Okt 2026',
         category: 'Kunjungan',
         summary: 'Kegiatan bermain dan belajar bersama kakak-kakak dari komunitas di hari Minggu yang ceria dan penuh makna kebersamaan.',
@@ -24,6 +49,7 @@ const articles = [
     {
         id: 3,
         title: 'Pembangunan Ruang Belajar Baru',
+        slug: 'pembangunan-ruang-belajar-baru',
         date: '28 Sep 2026',
         category: 'Infrastruktur',
         summary: 'Proses peletakan batu pertama untuk ruang belajar tambahan bagi anak-anak panti yang ditargetkan selesai akhir bulan depan.',
@@ -32,12 +58,21 @@ const articles = [
     {
         id: 4,
         title: 'Cek Kesehatan Gratis Bersama RSUD',
+        slug: 'cek-kesehatan-gratis-bersama-rsud',
         date: '15 Sep 2026',
         category: 'Kesehatan',
         summary: 'Seluruh anak asuh mendapatkan pemeriksaan kesehatan komprehensif secara gratis dari tim dokter relawan.',
         image: '/assets/images/bukber-2.jpg',
     }
 ];
+
+const displayFeatured = computed(() => {
+    return props.featuredArticle !== undefined && props.featuredArticle !== null ? props.featuredArticle : defaultFeatured;
+});
+
+const articleList = computed(() => {
+    return props.articles && props.articles.length > 0 ? props.articles : defaultArticles;
+});
 </script>
 
 <template>
@@ -69,19 +104,19 @@ const articles = [
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 -mt-8">
                 
                 <!-- Featured Article (Cinematic Left-Right Layout) -->
-                <Link :href="'/artikel/baca?img=' + encodeURIComponent(featuredArticle.image) + '&title=' + encodeURIComponent(featuredArticle.title) + '&category=' + encodeURIComponent(featuredArticle.category) + '&summary=' + encodeURIComponent(featuredArticle.summary)" class="bg-white rounded-[3rem] shadow-2xl overflow-hidden mb-20 flex flex-col lg:flex-row group border border-gray-100 hover:shadow-3xl block">
+                <Link v-if="displayFeatured" :href="'/artikel/' + displayFeatured.slug" class="bg-white rounded-[3rem] shadow-2xl overflow-hidden mb-20 flex flex-col lg:flex-row group border border-gray-100 hover:shadow-3xl block">
                     <div class="w-full lg:w-3/5 h-80 lg:h-auto relative overflow-hidden">
-                        <img :src="featuredArticle.image" :alt="featuredArticle.title" class="absolute inset-0 w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-1000" />
+                        <img :src="displayFeatured.image" :alt="displayFeatured.title" class="absolute inset-0 w-full h-full object-cover transform group-hover:scale-105 transition-transform duration-1000" />
                         <div class="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-black/20 hidden lg:block"></div>
                     </div>
                     <div class="w-full lg:w-2/5 p-10 md:p-16 flex flex-col justify-center relative">
-                        <span class="inline-block px-5 py-2 bg-blue-50 text-blue-600 rounded-full text-xs font-bold uppercase tracking-wider mb-6 w-max">{{ featuredArticle.category }}</span>
+                        <span class="inline-block px-5 py-2 bg-blue-50 text-blue-600 rounded-full text-xs font-bold uppercase tracking-wider mb-6 w-max">{{ displayFeatured.category }}</span>
                         <h2 class="text-3xl md:text-5xl font-extrabold text-gray-900 mb-6 leading-tight group-hover:text-blue-600 transition-colors">
-                            {{ featuredArticle.title }}
+                            {{ displayFeatured.title }}
                         </h2>
-                        <p class="text-gray-500 text-lg md:text-xl leading-relaxed mb-10">{{ featuredArticle.summary }}</p>
+                        <p class="text-gray-500 text-lg md:text-xl leading-relaxed mb-10">{{ displayFeatured.summary }}</p>
                         <div class="flex items-center justify-between border-t border-gray-100 pt-8 mt-auto">
-                            <span class="text-sm font-bold text-gray-400 uppercase tracking-widest">{{ featuredArticle.date }}</span>
+                            <span class="text-sm font-bold text-gray-400 uppercase tracking-widest">{{ displayFeatured.date }}</span>
                             <div class="w-14 h-14 rounded-full bg-gray-900 flex items-center justify-center text-white group-hover:bg-blue-600 transition-colors transform group-hover:translate-x-2 shadow-xl">
                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-6 h-6">
                                     <path stroke-linecap="round" stroke-linejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
@@ -93,7 +128,7 @@ const articles = [
 
                 <!-- Standard Articles Grid -->
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10">
-                    <Link v-for="news in articles" :key="news.id" :href="'/artikel/baca?img=' + encodeURIComponent(news.image) + '&title=' + encodeURIComponent(news.title) + '&category=' + encodeURIComponent(news.category) + '&summary=' + encodeURIComponent(news.summary)" class="flex flex-col bg-white rounded-[2.5rem] overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-500 border border-gray-100 group">
+                    <Link v-for="news in articleList" :key="news.id" :href="'/artikel/' + news.slug" class="flex flex-col bg-white rounded-[2.5rem] overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-500 border border-gray-100 group">
                         <div class="relative h-72 overflow-hidden">
                             <img :src="news.image" :alt="news.title" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-700" />
                             <div class="absolute inset-0 bg-gradient-to-t from-black/80 to-transparent opacity-60 group-hover:opacity-80 transition-opacity"></div>
