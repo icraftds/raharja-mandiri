@@ -13,6 +13,7 @@ use App\Models\Rekening;
 use App\Models\KebutuhanDonasi;
 use App\Models\Program;
 use App\Models\Mitra;
+use App\Models\PengunjungWebsite;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
@@ -424,6 +425,57 @@ class DatabaseSeeder extends Seeder
 
         foreach ($mitraData as $row) {
             Mitra::updateOrCreate(['nama' => $row['nama']], $row);
+        }
+
+        // 12. Pengunjung Website (Data Awal Analitik)
+        if (PengunjungWebsite::count() === 0) {
+            $halamanSampel = [
+                ['halaman' => '/', 'judul' => 'Beranda Utama'],
+                ['halaman' => '/tentang/visi-misi', 'judul' => 'Visi & Misi'],
+                ['halaman' => '/tentang/sejarah', 'judul' => 'Sejarah Panti'],
+                ['halaman' => '/tentang/kepengurusan', 'judul' => 'Struktur Kepengurusan'],
+                ['halaman' => '/galeri', 'judul' => 'Galeri Kegiatan'],
+                ['halaman' => '/artikel', 'judul' => 'Artikel & Berita'],
+                ['halaman' => '/donasi/rekening', 'judul' => 'Rekening Donasi'],
+                ['halaman' => '/donasi/kebutuhan', 'judul' => 'Kebutuhan Donasi'],
+                ['halaman' => '/kontak', 'judul' => 'Hubungi Kami'],
+            ];
+
+            $perangkatList = ['Mobile', 'Desktop', 'Tablet'];
+            $browserList = ['Chrome', 'Safari', 'Firefox', 'Microsoft Edge'];
+            $osList = ['Android', 'iOS', 'Windows', 'macOS'];
+
+            $dataKunjungan = [];
+            // Buat sekitar 180 catatan kunjungan realistis dalam 14 hari terakhir
+            for ($hari = 13; $hari >= 0; $hari--) {
+                $jumlahHariIni = rand(8, 25);
+                for ($k = 0; $k < $jumlahHariIni; $k++) {
+                    $itemHalaman = $halamanSampel[array_rand($halamanSampel)];
+                    $perangkat = $perangkatList[rand(0, 10) > 4 ? 0 : (rand(0, 5) > 4 ? 2 : 1)];
+                    $browser = $browserList[array_rand($browserList)];
+                    $os = $perangkat === 'Mobile' ? ($browser === 'Safari' ? 'iOS' : 'Android') : ($browser === 'Safari' ? 'macOS' : 'Windows');
+                    $ip = '182.' . rand(1, 254) . '.' . rand(1, 254) . '.' . rand(1, 254);
+
+                    $jam = rand(7, 22);
+                    $menit = rand(0, 59);
+                    $waktu = \Carbon\Carbon::today()->subDays($hari)->setHour($jam)->setMinute($menit);
+
+                    $dataKunjungan[] = [
+                        'alamat_ip' => $ip,
+                        'halaman' => $itemHalaman['halaman'],
+                        'judul_halaman' => $itemHalaman['judul'],
+                        'perangkat' => $perangkat,
+                        'browser' => $browser,
+                        'sistem_operasi' => $os,
+                        'perujuk' => rand(0, 3) > 1 ? 'https://google.com' : 'Direct',
+                        'user_agent' => 'Mozilla/5.0 Sampel Seeder',
+                        'created_at' => $waktu,
+                        'updated_at' => $waktu,
+                    ];
+                }
+            }
+
+            PengunjungWebsite::insert($dataKunjungan);
         }
     }
 }

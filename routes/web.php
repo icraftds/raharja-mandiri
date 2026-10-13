@@ -22,6 +22,7 @@ use App\Http\Controllers\Admin\RekeningController;
 use App\Http\Controllers\Admin\KebutuhanController;
 use App\Http\Controllers\Admin\KontakController as AdminKontakController;
 use App\Http\Controllers\Admin\PesanController;
+use App\Http\Controllers\Admin\PengunjungController;
 
 /*
 |--------------------------------------------------------------------------
@@ -126,4 +127,8 @@ Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
     Route::get('/pesan', [PesanController::class, 'index'])->name('pesan');
     Route::patch('/pesan/{id}/dibaca', [PesanController::class, 'markAsRead'])->name('pesan.dibaca');
     Route::delete('/pesan/{id}', [PesanController::class, 'destroy'])->name('pesan.destroy');
+
+    // Analitik Pengunjung Website
+    Route::get('/pengunjung', [PengunjungController::class, 'index'])->name('pengunjung');
+    Route::delete('/pengunjung/bersihkan', [PengunjungController::class, 'cleanOldLogs'])->name('pengunjung.clean');
 });
