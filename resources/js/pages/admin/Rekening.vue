@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Head, router, useForm } from '@inertiajs/vue3';
 import AdminLayout from '../components/admin/AdminLayout.vue';
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 
 interface BankItem {
     id: number;
@@ -15,10 +15,21 @@ const props = defineProps<{
     bankList?: BankItem[];
 }>();
 
-const banks = ref(
+const banks = ref<BankItem[]>(
     props.bankList && props.bankList.length > 0 
         ? JSON.parse(JSON.stringify(props.bankList))
         : []
+);
+
+// Sinkronkan state lokal banks secara otomatis saat props.bankList diperbarui oleh server (Inertia)
+watch(
+    () => props.bankList,
+    (newList) => {
+        if (newList) {
+            banks.value = JSON.parse(JSON.stringify(newList));
+        }
+    },
+    { deep: true }
 );
 
 const showAddModal = ref(false);
@@ -38,6 +49,7 @@ const onFileChange = (e: Event) => {
 
 const submitNew = () => {
     newForm.post('/admin/rekening', {
+        preserveScroll: true,
         onSuccess: () => {
             showAddModal.value = false;
             newForm.reset();
@@ -67,7 +79,11 @@ const deleteBank = (id: number) => {
 
     router.delete(`/admin/rekening/${id}`, {
         preserveScroll: true,
-        onSuccess: () => alert('Rekening berhasil dihapus.'),
+        onSuccess: () => {
+            // Hapus langsung dari array lokal agar tampilan Vue seketika menghilang tanpa perlu refresh
+            banks.value = banks.value.filter(b => b.id !== id);
+            alert('Rekening berhasil dihapus.');
+        },
     });
 };
 </script>
@@ -126,7 +142,7 @@ const deleteBank = (id: number) => {
                 
                 <div class="p-8 space-y-6">
                     <div v-for="bank in banks" :key="bank.id" class="p-6 border border-gray-200 rounded-2xl flex flex-col md:flex-row gap-6 relative group bg-white">
-                        <button @click="deleteBank(bank.id)" type="button" class="absolute top-4 right-4 text-red-400 hover:text-red-600 p-2 rounded-lg hover:bg-red-50 transition-colors">
+                        <button @click="deleteBank(bank.id)" type="button" class="absolute top-4 right-4 text-red-400 hover:text-red-600 p-2 rounded-lg hover:bg-red-50 transition-colors" title="Hapus">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" /></svg>
                         </button>
                         
@@ -145,6 +161,10 @@ const deleteBank = (id: number) => {
                                 <input v-model="bank.atas_nama" type="text" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-teal-500 font-medium" />
                             </div>
                         </div>
+                    </div>
+
+                    <div v-if="banks.length === 0" class="text-center py-12 text-gray-400">
+                        Belum ada nomor rekening terdaftar. Klik "+ Tambah Rekening" untuk menambahkan.
                     </div>
                 </div>
 
