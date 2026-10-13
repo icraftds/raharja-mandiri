@@ -1,14 +1,58 @@
 <script setup lang="ts">
-import { Head, Link } from '@inertiajs/vue3';
+import { Head, router, useForm } from '@inertiajs/vue3';
 import AdminLayout from '../components/admin/AdminLayout.vue';
 import { ref } from 'vue';
 
-const photos = ref([
-    { id: 1, title: 'Kegiatan Belajar Mengajar', category: 'Pendidikan', url: '/assets/images/bukber-1.jpg' },
-    { id: 2, title: 'Kunjungan Donatur', category: 'Kunjungan', url: '/assets/images/relawan-1.jpg' },
-    { id: 3, title: 'Pemeriksaan Kesehatan', category: 'Kesehatan', url: '/assets/images/sepatu-1.jpg' },
-]);
+interface PhotoItem {
+    id: number;
+    judul: string;
+    kategori: string;
+    gambar: string;
+}
+
+const props = defineProps<{
+    photoList?: PhotoItem[];
+}>();
+
+const uploadForm = useForm({
+    judul: '',
+    kategori: 'Pendidikan',
+    gambar: null as File | null,
+});
+
+const previewImg = ref<string | null>(null);
+
+const onFileChange = (e: Event) => {
+    const target = e.target as HTMLInputElement;
+    if (target.files && target.files[0]) {
+        uploadForm.gambar = target.files[0];
+        previewImg.value = URL.createObjectURL(target.files[0]);
+    }
+};
+
+const submitUpload = () => {
+    uploadForm.post('/admin/galeri', {
+        preserveScroll: true,
+        onSuccess: () => {
+            uploadForm.reset();
+            previewImg.value = null;
+            alert('Foto baru berhasil diunggah ke galeri!');
+        },
+    });
+};
+
+const deletePhoto = (id: number) => {
+    if (!confirm('Apakah Anda yakin ingin menghapus foto ini dari galeri?')) return;
+
+    router.delete(`/admin/galeri/${id}`, {
+        preserveScroll: true,
+        onSuccess: () => {
+            alert('Foto berhasil dihapus.');
+        },
+    });
+};
 </script>
+
 <template>
     <Head title="Manajemen Galeri | CMS" />
     <AdminLayout>
@@ -27,24 +71,29 @@ const photos = ref([
             </div>
 
             <!-- Upload Box -->
-            <div class="bg-white rounded-[2rem] shadow-sm border border-gray-100 overflow-hidden">
+            <form @submit.prevent="submitUpload" class="bg-white rounded-[2rem] shadow-sm border border-gray-100 overflow-hidden">
                 <div class="p-8 border-b border-gray-100 bg-gray-50/50">
                     <h2 class="text-xl font-bold text-gray-900">Upload Foto Baru</h2>
                 </div>
                 <div class="p-8 flex flex-col md:flex-row gap-8">
-                    <div class="w-full md:w-1/3 h-48 border-2 border-dashed border-gray-300 rounded-2xl flex flex-col items-center justify-center text-gray-500 hover:bg-gray-50 hover:border-teal-500 cursor-pointer transition-colors group">
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-10 h-10 mb-3 group-hover:text-teal-500"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
-                        <span class="font-bold text-sm">Pilih Gambar</span>
-                        <span class="text-xs mt-1">JPG, PNG max 2MB</span>
-                    </div>
+                    <label class="w-full md:w-1/3 h-52 border-2 border-dashed border-gray-300 rounded-2xl flex flex-col items-center justify-center text-gray-500 hover:bg-gray-50 hover:border-teal-500 cursor-pointer transition-colors group relative overflow-hidden">
+                        <img v-if="previewImg" :src="previewImg" class="absolute inset-0 w-full h-full object-cover" />
+                        <div v-else class="flex flex-col items-center">
+                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-10 h-10 mb-3 group-hover:text-teal-500"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
+                            <span class="font-bold text-sm">Pilih Gambar</span>
+                            <span class="text-xs mt-1">JPG, PNG, WebP max 2MB</span>
+                        </div>
+                        <input type="file" accept="image/*" class="hidden" required @change="onFileChange" />
+                    </label>
+
                     <div class="w-full md:w-2/3 space-y-4">
                         <div>
                             <label class="block text-sm font-bold text-gray-700 mb-2">Judul Foto</label>
-                            <input type="text" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-teal-500 font-medium" placeholder="Contoh: Belajar Komputer" />
+                            <input v-model="uploadForm.judul" type="text" required class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-teal-500 font-medium" placeholder="Contoh: Belajar Komputer Bersama" />
                         </div>
                         <div>
                             <label class="block text-sm font-bold text-gray-700 mb-2">Kategori</label>
-                            <select class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-teal-500 font-medium bg-white">
+                            <select v-model="uploadForm.kategori" class="w-full px-4 py-3 rounded-xl border border-gray-200 focus:border-teal-500 font-medium bg-white">
                                 <option>Pendidikan</option>
                                 <option>Kesehatan</option>
                                 <option>Keagamaan</option>
@@ -52,11 +101,14 @@ const photos = ref([
                             </select>
                         </div>
                         <div class="pt-2">
-                            <button class="px-8 py-3 bg-teal-600 text-white font-bold rounded-xl hover:bg-teal-700 shadow-md transition-all">Upload & Simpan</button>
+                            <button type="submit" :disabled="uploadForm.processing" class="px-8 py-3 bg-teal-600 text-white font-bold rounded-xl hover:bg-teal-700 shadow-md transition-all disabled:opacity-50">
+                                <span v-if="uploadForm.processing">Mengunggah...</span>
+                                <span v-else>Upload & Simpan</span>
+                            </button>
                         </div>
                     </div>
                 </div>
-            </div>
+            </form>
 
             <!-- List Foto -->
             <div class="bg-white rounded-[2rem] shadow-sm border border-gray-100 overflow-hidden">
@@ -65,17 +117,18 @@ const photos = ref([
                 </div>
                 <div class="p-8">
                     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-                        <div v-for="photo in photos" :key="photo.id" class="border border-gray-200 rounded-2xl overflow-hidden group">
-                            <div class="h-40 overflow-hidden relative">
-                                <img :src="photo.url" class="w-full h-full object-cover group-hover:scale-105 transition-transform" />
+                        <div v-for="photo in props.photoList" :key="photo.id" class="border border-gray-200 rounded-2xl overflow-hidden group relative bg-gray-100">
+                            <div class="h-44 overflow-hidden relative">
+                                <img :src="photo.gambar" class="w-full h-full object-cover group-hover:scale-105 transition-transform" />
                                 <div class="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-3">
-                                    <button class="w-10 h-10 bg-white rounded-full flex items-center justify-center text-blue-600 hover:bg-blue-50"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L6.832 19.82a4.5 4.5 0 01-1.897 1.13l-2.685.8.8-2.685a4.5 4.5 0 011.13-1.897L16.863 4.487zm0 0L19.5 7.125" /></svg></button>
-                                    <button class="w-10 h-10 bg-red-500 rounded-full flex items-center justify-center text-white hover:bg-red-600"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" /></svg></button>
+                                    <button @click="deletePhoto(photo.id)" type="button" class="w-10 h-10 bg-red-500 rounded-full flex items-center justify-center text-white hover:bg-red-600 shadow transition-colors">
+                                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M14.74 9l-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 01-2.244 2.077H8.084a2.25 2.25 0 01-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 00-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 013.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 00-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 00-7.5 0" /></svg>
+                                    </button>
                                 </div>
                             </div>
                             <div class="p-4 bg-white">
-                                <span class="text-xs font-bold text-teal-600 uppercase tracking-wider mb-1 block">{{ photo.category }}</span>
-                                <h4 class="font-bold text-gray-900 truncate">{{ photo.title }}</h4>
+                                <span class="text-xs font-bold text-teal-600 uppercase tracking-wider mb-1 block">{{ photo.kategori }}</span>
+                                <h4 class="font-bold text-gray-900 truncate">{{ photo.judul }}</h4>
                             </div>
                         </div>
                     </div>

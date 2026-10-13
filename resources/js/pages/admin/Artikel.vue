@@ -1,13 +1,33 @@
 <script setup lang="ts">
-import { Head, Link } from '@inertiajs/vue3';
+import { Head, Link, router } from '@inertiajs/vue3';
 import AdminLayout from '../components/admin/AdminLayout.vue';
 
-const articles = [
-    { id: 1, title: 'Bantuan Pendidikan Semester Ganjil 2026', date: '10 Okt 2026', category: 'Pendidikan', status: 'Published' },
-    { id: 2, title: 'Kunjungan Komunitas Berbagi Kasih', date: '05 Okt 2026', category: 'Kunjungan', status: 'Published' },
-    { id: 3, title: 'Draft: Persiapan Qurban', date: '-', category: 'Keagamaan', status: 'Draft' },
-];
+interface ArticleItem {
+    id: number;
+    judul: string;
+    slug: string;
+    kategori: string;
+    tanggal_publikasi?: string;
+    status: string;
+    unggulan?: boolean;
+}
+
+const props = defineProps<{
+    articleList?: ArticleItem[];
+}>();
+
+const deleteArticle = (id: number) => {
+    if (!confirm('Apakah Anda yakin ingin menghapus artikel ini?')) return;
+
+    router.delete(`/admin/artikel/${id}`, {
+        preserveScroll: true,
+        onSuccess: () => {
+            alert('Artikel berhasil dihapus.');
+        },
+    });
+};
 </script>
+
 <template>
     <Head title="Manajemen Artikel | CMS" />
     <AdminLayout>
@@ -28,13 +48,13 @@ const articles = [
             <div class="bg-white rounded-[2rem] shadow-sm border border-gray-100 overflow-hidden">
                 <div class="p-8 border-b border-gray-100 bg-gray-50/50 flex justify-between items-center">
                     <h2 class="text-xl font-bold text-gray-900">Daftar Artikel</h2>
-                    <Link href="/admin/artikel/edit" class="px-6 py-3 bg-teal-600 text-white font-bold rounded-xl hover:bg-teal-700 shadow-md transition-all flex items-center gap-2">
+                    <Link href="/admin/artikel/tambah" class="px-6 py-3 bg-teal-600 text-white font-bold rounded-xl hover:bg-teal-700 shadow-md transition-all flex items-center gap-2">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 4.5v15m7.5-7.5h-15" /></svg>
                         Tulis Artikel Baru
                     </Link>
                 </div>
                 
-                <div>
+                <div class="overflow-x-auto">
                     <table class="w-full text-left border-collapse">
                         <thead>
                             <tr class="bg-gray-50 text-gray-500 text-xs uppercase tracking-widest border-b border-gray-100">
@@ -46,24 +66,25 @@ const articles = [
                             </tr>
                         </thead>
                         <tbody>
-                            <tr v-for="news in articles" :key="news.id" class="border-b border-gray-50 hover:bg-gray-50/50 transition-colors">
+                            <tr v-for="news in props.articleList" :key="news.id" class="border-b border-gray-50 hover:bg-gray-50/50 transition-colors">
                                 <td class="p-6">
-                                    <p class="font-bold text-gray-900 text-lg">{{ news.title }}</p>
+                                    <p class="font-bold text-gray-900 text-lg">{{ news.judul }}</p>
+                                    <span v-if="news.unggulan" class="text-xs bg-amber-100 text-amber-800 font-bold px-2 py-0.5 rounded-md mt-1 inline-block">Artikel Unggulan</span>
                                 </td>
                                 <td class="p-6">
-                                    <span class="px-3 py-1 bg-blue-50 text-blue-600 rounded-full text-xs font-bold">{{ news.category }}</span>
+                                    <span class="px-3 py-1 bg-blue-50 text-blue-600 rounded-full text-xs font-bold">{{ news.kategori }}</span>
                                 </td>
-                                <td class="p-6 text-gray-500 font-medium">{{ news.date }}</td>
+                                <td class="p-6 text-gray-500 font-medium">{{ news.tanggal_publikasi || '-' }}</td>
                                 <td class="p-6">
-                                    <span :class="['px-3 py-1 rounded-full text-xs font-bold', news.status === 'Published' ? 'bg-green-50 text-green-600' : 'bg-amber-50 text-amber-600']">
+                                    <span :class="['px-3 py-1 rounded-full text-xs font-bold uppercase', news.status === 'published' ? 'bg-green-50 text-green-600' : 'bg-amber-50 text-amber-600']">
                                         {{ news.status }}
                                     </span>
                                 </td>
-                                <td class="p-6 text-right space-x-2">
-                                    <Link href="/admin/artikel/edit" class="inline-block p-2 bg-white border border-gray-200 rounded-lg text-blue-600 hover:bg-blue-50 hover:border-blue-200 transition-colors">
+                                <td class="p-6 text-right space-x-2 whitespace-nowrap">
+                                    <Link :href="`/admin/artikel/${news.id}/edit`" class="inline-block px-3 py-1.5 bg-white border border-gray-200 rounded-lg text-blue-600 hover:bg-blue-50 hover:border-blue-200 font-medium transition-colors text-sm">
                                         Edit
                                     </Link>
-                                    <button class="inline-block p-2 bg-white border border-gray-200 rounded-lg text-red-500 hover:bg-red-50 hover:border-red-200 transition-colors">
+                                    <button @click="deleteArticle(news.id)" type="button" class="inline-block px-3 py-1.5 bg-white border border-gray-200 rounded-lg text-red-500 hover:bg-red-50 hover:border-red-200 font-medium transition-colors text-sm">
                                         Hapus
                                     </button>
                                 </td>

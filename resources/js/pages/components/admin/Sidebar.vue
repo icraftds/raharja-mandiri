@@ -1,18 +1,15 @@
 <script setup lang="ts">
 import { Link } from '@inertiajs/vue3';
 </script>
+
 <template>
     <aside class="w-64 bg-gray-900 text-white min-h-screen flex flex-col fixed left-0 top-0 bottom-0 z-40">
         <div class="p-6 border-b border-gray-800">
             <h2 class="text-2xl font-black tracking-widest text-teal-400">CMS<span class="text-white">PANEL</span></h2>
+            <p class="text-xs text-gray-400 mt-1">PSRM Raharja Mandiri</p>
         </div>
         <nav class="flex-grow p-4 space-y-2 overflow-y-auto">
-            <Link href="/admin/dashboard" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-gray-800 text-white font-medium hover:bg-gray-700 transition-colors">
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" /></svg>
-                Beranda
-            </Link>
-            
-            <div class="pt-6 pb-2">
+            <div class="pb-2">
                 <span class="px-4 text-xs font-bold text-gray-500 uppercase tracking-widest">Halaman Publik</span>
             </div>
             
@@ -93,6 +90,17 @@ import { Link } from '@inertiajs/vue3';
                 <div v-if="$page.url === '/admin/rekening'" class="w-2 h-2 rounded-full bg-teal-400"></div>
             </Link>
 
+            <Link href="/admin/kebutuhan" :class="[
+                'flex items-center justify-between gap-3 px-4 py-3 rounded-xl font-medium transition-colors',
+                $page.url === '/admin/kebutuhan' ? 'text-teal-400 bg-teal-500/10 font-bold' : 'text-gray-400 hover:bg-gray-800 hover:text-white'
+            ]">
+                <div class="flex items-center gap-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M20.25 7.5l-.625 10.632a2.25 2.25 0 01-2.247 2.118H6.622a2.25 2.25 0 01-2.247-2.118L3.75 7.5M10 11.25h4M3.375 7.5h17.25c.621 0 1.125-.504 1.125-1.125v-1.5c0-.621-.504-1.125-1.125-1.125H3.375c-.621 0-1.125.504-1.125 1.125v1.5c0 .621.504 1.125 1.125 1.125z" /></svg>
+                    Kebutuhan Donasi
+                </div>
+                <div v-if="$page.url === '/admin/kebutuhan'" class="w-2 h-2 rounded-full bg-teal-400"></div>
+            </Link>
+
             <Link href="/admin/kontak" :class="[
                 'flex items-center justify-between gap-3 px-4 py-3 rounded-xl font-medium transition-colors',
                 $page.url === '/admin/kontak' ? 'text-teal-400 bg-teal-500/10 font-bold' : 'text-gray-400 hover:bg-gray-800 hover:text-white'
@@ -103,10 +111,25 @@ import { Link } from '@inertiajs/vue3';
                 </div>
                 <div v-if="$page.url === '/admin/kontak'" class="w-2 h-2 rounded-full bg-teal-400"></div>
             </Link>
+
+            <div class="pt-4 pb-2">
+                <span class="px-4 text-xs font-bold text-gray-500 uppercase tracking-widest">Interaksi Pengunjung</span>
+            </div>
+
+            <Link href="/admin/pesan" :class="[
+                'flex items-center justify-between gap-3 px-4 py-3 rounded-xl font-medium transition-colors',
+                $page.url === '/admin/pesan' ? 'text-teal-400 bg-teal-500/10 font-bold' : 'text-gray-400 hover:bg-gray-800 hover:text-white'
+            ]">
+                <div class="flex items-center gap-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75" /></svg>
+                    Pesan Masuk
+                </div>
+                <div v-if="$page.url === '/admin/pesan'" class="w-2 h-2 rounded-full bg-teal-400"></div>
+            </Link>
         </nav>
         
         <div class="p-4 border-t border-gray-800">
-            <Link href="/admin/login" class="flex items-center gap-3 px-4 py-3 rounded-xl text-red-400 font-medium hover:bg-red-500/10 transition-colors w-full">
+            <Link href="/admin/logout" method="post" as="button" class="flex items-center gap-3 px-4 py-3 rounded-xl text-red-400 font-medium hover:bg-red-500/10 transition-colors w-full text-left">
                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="w-5 h-5"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 9V5.25A2.25 2.25 0 0013.5 3h-6a2.25 2.25 0 00-2.25 2.25v13.5A2.25 2.25 0 007.5 21h6a2.25 2.25 0 002.25-2.25V15m3 0l3-3m0 0l-3-3m3 3H9" /></svg>
                 Logout
             </Link>

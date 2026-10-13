@@ -1,16 +1,33 @@
 <script setup lang="ts">
-import { Head } from '@inertiajs/vue3';
+import { Head, useForm } from '@inertiajs/vue3';
 import AdminLayout from '../components/admin/AdminLayout.vue';
-import { ref } from 'vue';
 
-const contact = ref({
-    address: 'Dusun Tanjungsari RT 01/02, Desa Tanjungsari, Kec. Tanjungsari, Kab. Sumedang, Jawa Barat 45362',
-    phone: '0812-3456-7890',
-    email: 'info@raharjamandiri.org',
-    mapsUrl: 'https://maps.google.com/...',
-    instagram: '@raharjamandiri'
+const props = defineProps<{
+    contactData?: {
+        address: string;
+        phone: string;
+        email: string;
+        mapsUrl?: string;
+        instagram?: string;
+    };
+}>();
+
+const form = useForm({
+    address: props.contactData?.address || 'Tanjungsari, Sumedang',
+    phone: props.contactData?.phone || '+62 813-2210-1618',
+    email: props.contactData?.email || 'psrm@raharjamandiri.org',
+    mapsUrl: props.contactData?.mapsUrl || '',
+    instagram: props.contactData?.instagram || '@psrm_raharja_mandiri',
 });
+
+const submit = () => {
+    form.post('/admin/kontak', {
+        preserveScroll: true,
+        onSuccess: () => alert('Pembaruan data kontak publik berhasil disimpan!'),
+    });
+};
 </script>
+
 <template>
     <Head title="Manajemen Kontak | CMS" />
     <AdminLayout>
@@ -28,7 +45,7 @@ const contact = ref({
                 </div>
             </div>
 
-            <div class="bg-white rounded-[2rem] shadow-sm border border-gray-100 overflow-hidden">
+            <form @submit.prevent="submit" class="bg-white rounded-[2rem] shadow-sm border border-gray-100 overflow-hidden">
                 <div class="p-8 border-b border-gray-100 bg-gray-50/50">
                     <h2 class="text-xl font-bold text-gray-900">Ubah Data Kontak Publik</h2>
                 </div>
@@ -36,38 +53,39 @@ const contact = ref({
                 <div class="p-8 space-y-6">
                     <div>
                         <label class="block text-sm font-bold text-gray-700 mb-2">Alamat Lengkap Yayasan</label>
-                        <textarea v-model="contact.address" rows="3" class="w-full px-5 py-4 rounded-xl border border-gray-200 focus:border-teal-500 font-medium resize-none"></textarea>
+                        <textarea v-model="form.address" rows="3" required class="w-full px-5 py-4 rounded-xl border border-gray-200 focus:border-teal-500 font-medium resize-none"></textarea>
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
                             <label class="block text-sm font-bold text-gray-700 mb-2">Nomor Telepon / WhatsApp</label>
-                            <input v-model="contact.phone" type="text" class="w-full px-5 py-4 rounded-xl border border-gray-200 focus:border-teal-500 font-bold" />
+                            <input v-model="form.phone" type="text" required class="w-full px-5 py-4 rounded-xl border border-gray-200 focus:border-teal-500 font-bold" />
                         </div>
                         <div>
                             <label class="block text-sm font-bold text-gray-700 mb-2">Alamat Email</label>
-                            <input v-model="contact.email" type="email" class="w-full px-5 py-4 rounded-xl border border-gray-200 focus:border-teal-500 font-medium text-blue-600" />
+                            <input v-model="form.email" type="email" required class="w-full px-5 py-4 rounded-xl border border-gray-200 focus:border-teal-500 font-medium text-blue-600" />
                         </div>
                     </div>
 
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
-                            <label class="block text-sm font-bold text-gray-700 mb-2">Link Google Maps (Iframe/URL)</label>
-                            <input v-model="contact.mapsUrl" type="text" class="w-full px-5 py-4 rounded-xl border border-gray-200 focus:border-teal-500 font-medium" />
+                            <label class="block text-sm font-bold text-gray-700 mb-2">Link Google Maps</label>
+                            <input v-model="form.mapsUrl" type="text" class="w-full px-5 py-4 rounded-xl border border-gray-200 focus:border-teal-500 font-medium" />
                         </div>
                         <div>
                             <label class="block text-sm font-bold text-gray-700 mb-2">Username / Link Instagram</label>
-                            <input v-model="contact.instagram" type="text" class="w-full px-5 py-4 rounded-xl border border-gray-200 focus:border-teal-500 font-medium" />
+                            <input v-model="form.instagram" type="text" class="w-full px-5 py-4 rounded-xl border border-gray-200 focus:border-teal-500 font-medium" />
                         </div>
                     </div>
                 </div>
 
                 <div class="p-8 bg-gray-50 border-t border-gray-100 flex justify-end">
-                    <button class="px-10 py-4 bg-teal-600 hover:bg-teal-700 text-white font-bold rounded-xl shadow-lg hover:-translate-y-1 transition-all">
-                        Simpan Pembaruan Kontak
+                    <button type="submit" :disabled="form.processing" class="px-10 py-4 bg-teal-600 hover:bg-teal-700 text-white font-bold rounded-xl shadow-lg hover:-translate-y-1 transition-all disabled:opacity-50">
+                        <span v-if="form.processing">Menyimpan...</span>
+                        <span v-else>Simpan Pembaruan Kontak</span>
                     </button>
                 </div>
-            </div>
+            </form>
 
         </div>
     </AdminLayout>
