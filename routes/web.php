@@ -23,6 +23,7 @@ use App\Http\Controllers\Admin\KebutuhanController;
 use App\Http\Controllers\Admin\KontakController as AdminKontakController;
 use App\Http\Controllers\Admin\PesanController;
 use App\Http\Controllers\Admin\PengunjungController;
+use App\Http\Controllers\Admin\MitraController;
 
 /*
 |--------------------------------------------------------------------------
@@ -93,6 +94,12 @@ Route::prefix('admin')->name('admin.')->middleware('auth')->group(function () {
     Route::post('/kepengurusan', [PengurusController::class, 'store'])->name('kepengurusan.store');
     Route::post('/kepengurusan/{id}', [PengurusController::class, 'update'])->name('kepengurusan.update');
     Route::delete('/kepengurusan/{id}', [PengurusController::class, 'destroy'])->name('kepengurusan.destroy');
+
+    // Mitra Kerja & Kolaborasi
+    Route::get('/mitra', [MitraController::class, 'index'])->name('mitra');
+    Route::post('/mitra', [MitraController::class, 'store'])->name('mitra.store');
+    Route::post('/mitra/{id}', [MitraController::class, 'update'])->name('mitra.update');
+    Route::delete('/mitra/{id}', [MitraController::class, 'destroy'])->name('mitra.destroy');
 
     // Galeri
     Route::get('/galeri', [AdminGaleriController::class, 'index'])->name('galeri');
