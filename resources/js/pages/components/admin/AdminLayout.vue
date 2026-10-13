@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import Sidebar from './Sidebar.vue';
 import Topbar from './Topbar.vue';
+import FooterAdmin from './FooterAdmin.vue';
 </script>
 <template>
     <div class="min-h-screen bg-gray-50 flex">
@@ -10,6 +11,8 @@ import Topbar from './Topbar.vue';
             <main class="flex-grow p-8">
                 <slot />
             </main>
+            <FooterAdmin />
         </div>
     </div>
 </template>
+
