@@ -7,7 +7,12 @@ import { Link } from '@inertiajs/vue3';
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-5 gap-12">
             <div class="col-span-1 md:col-span-2">
                 <div class="flex items-center gap-3 mb-6">
-                    <Link href="/" class="group">
+                    <Link href="/" class="group flex items-center gap-3">
+                        <img 
+                            src="/logo_raharja.png" 
+                            alt="Logo Raharja Mandiri" 
+                            class="h-10 w-auto object-contain transition-transform duration-200 group-hover:scale-105" 
+                        />
                         <span class="font-bold text-2xl text-white leading-none group-hover:text-blue-400 transition-colors">Raharja Mandiri</span>
                     </Link>
                 </div>

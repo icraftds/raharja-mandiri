@@ -26,8 +26,13 @@ const toggleMobileMenu = () => {
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex justify-between items-center">
             <!-- Logo -->
             <div class="flex items-center gap-3">
-                <Link href="/" class="group">
-                    <span :class="['font-extrabold text-2xl tracking-tight transition-colors leading-none', isScrolled ? 'text-gray-900 group-hover:text-blue-600' : 'text-white drop-shadow-md group-hover:text-blue-200']">
+                <Link href="/" class="group flex items-center gap-2.5 sm:gap-3">
+                    <img 
+                        src="/logo_raharja.png" 
+                        alt="Logo Raharja Mandiri" 
+                        class="h-9 sm:h-10 w-auto object-contain transition-transform duration-200 group-hover:scale-105" 
+                    />
+                    <span :class="['font-extrabold text-xl sm:text-2xl tracking-tight transition-colors leading-none', isScrolled ? 'text-gray-900 group-hover:text-blue-600' : 'text-white drop-shadow-md group-hover:text-blue-200']">
                         Raharja Mandiri
                     </span>
                 </Link>
