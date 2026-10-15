@@ -5,7 +5,7 @@ import { Link } from '@inertiajs/vue3';
 <template>
     <aside class="w-64 bg-gray-900 text-white min-h-screen flex flex-col fixed left-0 top-0 bottom-0 z-40 select-none">
         <div class="p-5 border-b border-gray-800">
-            <h2 class="text-xl font-black tracking-widest text-teal-400">CMS<span class="text-white">PANEL</span></h2>
+            <h2 class="text-xl font-black tracking-widest text-teal-400">ADMIN<span class="text-white">PANEL</span></h2>
             <p class="text-xs text-gray-400 mt-0.5">PSRM Raharja Mandiri</p>
         </div>
         <nav class="flex-grow p-3 space-y-1 overflow-y-auto">

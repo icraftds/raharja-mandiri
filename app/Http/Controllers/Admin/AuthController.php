@@ -35,7 +35,7 @@ class AuthController extends Controller
 
         if (Auth::attempt($kredensial, $request->boolean('remember'))) {
             $request->session()->regenerate();
-            return redirect()->intended(route('admin.dashboard'))->with('success', 'Selamat datang di CMS Panel!');
+            return redirect()->intended(route('admin.dashboard'))->with('success', 'Selamat datang di Admin Panel!');
         }
 
         return back()->withErrors([

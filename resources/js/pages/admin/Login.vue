@@ -23,7 +23,7 @@ const submit = () => {
             <div class="p-10 border-b border-gray-100 text-center bg-gray-900 relative overflow-hidden">
                 <div class="absolute inset-0 bg-gradient-to-br from-teal-500/20 to-blue-500/20"></div>
                 <div class="relative z-10">
-                    <h1 class="text-3xl font-black tracking-widest text-teal-400 mb-2">CMS<span class="text-white">PANEL</span></h1>
+                    <h1 class="text-3xl font-black tracking-widest text-teal-400 mb-2">ADMIN<span class="text-white">PANEL</span></h1>
                     <p class="text-gray-400 text-sm">Sistem Manajemen Konten Website</p>
                 </div>
             </div>

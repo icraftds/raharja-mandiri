@@ -9,7 +9,7 @@ Dokumen ini menyajikan analisis komprehensif terhadap antarmuka frontend eksisti
 
 Saat ini, website Raharja Mandiri memiliki dua lapisan antarmuka yang telah dibangun di sisi frontend:
 1. **Lapisan Publik (*Public Facing*)**: Menampilkan profil yayasan, visi-misi, sejarah linimasa, struktur pengurus, galeri kegiatan, artikel/berita, rekening donasi, daftar kebutuhan logistik, dan kontak. Seluruh data masih bersifat statis (*hardcoded* di dalam berkas `.vue`).
-2. **Lapisan Admin (*CMS Panel*)**: Menampilkan dasbor dan formulir pengeditan (`resources/js/pages/admin/`). Seluruh aksi formulir saat ini baru berupa mock-up state (`ref(...)`) lokal tanpa integrasi API/Controller, serta rute login masih berupa bypass statis tanpa proteksi sesi autentikasi.
+2. **Lapisan Admin (*Admin Panel*)**: Menampilkan dasbor dan formulir pengeditan (`resources/js/pages/admin/`). Seluruh aksi formulir saat ini baru berupa mock-up state (`ref(...)`) lokal tanpa integrasi API/Controller, serta rute login masih berupa bypass statis tanpa proteksi sesi autentikasi.
 
 ### Target Arsitektur:
 - **Framework Backend**: Laravel (PHP 8.3+) dengan arsitektur MVC & Inertia Adapter.
@@ -37,7 +37,7 @@ graph TD
         Storage["Storage Disk (Media Uploads)"]
     end
 
-    subgraph Admin ["CMS Panel (Admin)"]
+    subgraph Admin ["Admin Panel (Admin)"]
         A_Login["admin/Login.vue"]
         A_Dash["admin/Dashboard.vue (Homepage)"]
         A_Pages["admin/* (Visi, Sejarah, Artikel, dll.)"]
